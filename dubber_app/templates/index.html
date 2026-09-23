@@ -1,0 +1,3614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VidyaVaani — AI-Powered Multilingual Education Platform</title>
+<meta name="description" content="VidyaVaani: Breaking language barriers in learning through AI translation, smart notes, and interactive quizzes. SDG 4 Quality Education.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Caveat:wght@500;700&family=Noto+Sans+Kannada:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:   #4338CA;  /* indigo */
+  --primary-l: #EEF2FF;
+  --saffron:   #F59E0B;  /* SDG warmth */
+  --saffron-l: #FEF3C7;
+  --teal:      #0D9488;  /* knowledge/growth */
+  --teal-l:    #CCFBF1;
+  --rose:      #E11D48;
+  --rose-l:    #FFE4E6;
+  --bg:        #FDFAF3;  /* warm cream */
+  --bg2:       #F3EFE5;
+  --card:      #FFFFFF;
+  --border:    #E5DDD0;
+  --text:      #1E1B4B;
+  --muted:     #78716C;
+  --success:   #059669;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Notebook dot grid background ── */
+body::before {
+  content:'';
+  position: fixed; inset:0; pointer-events:none; z-index:0;
+  background-image: radial-gradient(circle, #C4B5A0 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.35;
+}
+
+/* ── Doodle SVG decorations in hero ── */
+.doodle-wrap {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+}
+.doodle-wrap span {
+  position: absolute;
+  font-size: 1.8rem;
+  opacity: 0.12;
+  animation: floatDoodle 6s ease-in-out infinite;
+  user-select: none;
+}
+.doodle-wrap span:nth-child(1)  { top:8%;  left:3%;  animation-delay:0s; font-size:2.2rem; }
+.doodle-wrap span:nth-child(2)  { top:20%; left:90%; animation-delay:1s; font-size:1.5rem; }
+.doodle-wrap span:nth-child(3)  { top:55%; left:5%;  animation-delay:2s; font-size:1.2rem; }
+.doodle-wrap span:nth-child(4)  { top:70%; left:92%; animation-delay:0.5s; font-size:2rem; }
+.doodle-wrap span:nth-child(5)  { top:35%; left:50%; animation-delay:1.5s; font-size:1rem; }
+.doodle-wrap span:nth-child(6)  { top:5%;  left:55%; animation-delay:3s; font-size:1.6rem; }
+.doodle-wrap span:nth-child(7)  { top:80%; left:40%; animation-delay:2.5s; font-size:1.3rem; }
+.doodle-wrap span:nth-child(8)  { top:45%; left:95%; animation-delay:4s; font-size:1.1rem; }
+
+@keyframes floatDoodle {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-12px) rotate(8deg); }
+}
+
+/* ── Squiggle divider ── */
+.squiggle {
+  width: 100%; height: 12px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12'%3E%3Cpath d='M0 6 C10 0,20 12,30 6 S50 0,60 6 S80 12,90 6 S110 0,120 6' fill='none' stroke='%23C4B5A0' stroke-width='2'/%3E%3C/svg%3E") repeat-x center;
+  opacity: 0.6; margin: 0.4rem 0;
+}
+
+/* ── Hero / Header ── */
+.hero {
+  position: relative; z-index:1;
+  background: linear-gradient(135deg, #4338CA 0%, #6D28D9 50%, #0D9488 100%);
+  padding: 2.5rem 1.5rem 3rem;
+  text-align: center;
+  overflow: hidden;
+}
+.hero::after {
+  content:'';
+  position:absolute; bottom:-1px; left:0; right:0; height:40px;
+  background: var(--bg);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+.logo-badge {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 100px; padding: 0.4rem 1.2rem;
+  font-size: 0.72rem; letter-spacing: 2px; color: rgba(255,255,255,0.9);
+  text-transform: uppercase; margin-bottom: 1.2rem;
+  backdrop-filter: blur(4px);
+}
+.logo-badge .dot { width:7px; height:7px; background:#F59E0B; border-radius:50%; }
+
+.hero h1 {
+  font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 900;
+  color: #fff;
+  letter-spacing: -1px; line-height: 1.1;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+}
+.hero h1 span { color: #FCD34D; }
+
+.hero-tagline {
+  margin-top: 0.8rem; font-size: 1rem; color: rgba(255,255,255,0.8);
+  font-weight: 400; max-width: 520px; margin-inline: auto;
+}
+
+.sdg-pill {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  margin-top: 1.2rem;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 100px; padding: 0.35rem 1rem;
+  font-size: 0.75rem; color: rgba(255,255,255,0.85);
+  font-weight: 600;
+}
+.sdg-pill::before { content:'🌍'; }
+
+/* ── Page wrapper ── */
+.page {
+  position: relative; z-index:1;
+  max-width: 1200px; margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+}
+
+/* ── Cards ── */
+.edu-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(67,56,202,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  overflow: hidden;
+  animation: riseUp .5s cubic-bezier(.34,1.4,.64,1) both;
+}
+@keyframes riseUp {
+  from { opacity:0; transform: translateY(24px) scale(0.98); }
+  to   { opacity:1; transform: none; }
+}
+
+.card-head {
+  padding: 1rem 1.4rem;
+  border-bottom: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to right, var(--primary-l), #fff);
+}
+.card-head h2 {
+  font-size: 0.95rem; font-weight: 700; color: var(--primary);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.card-head h2::before { font-style: normal; }
+
+/* ── Setup card ── */
+.setup-wrap {
+  display: flex; flex-direction: column; gap: 1.4rem;
+  padding: 1.8rem;
+}
+.lang-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+.input-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.input-group label {
+  font-size: 0.68rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 1.5px;
+}
+select {
+  background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px;
+  padding: 0.65rem 0.9rem; color: var(--text);
+  font-family: inherit; font-size: 0.9rem; cursor: pointer;
+  transition: border-color .2s;
+}
+select:focus { outline: none; border-color: var(--primary); }
+
+.upload-zone {
+  border: 2.5px dashed #C4B5A0; border-radius: 16px;
+  padding: 2.2rem; text-align: center; cursor: pointer;
+  transition: all .3s ease; background: var(--bg);
+  position: relative; overflow: hidden;
+}
+.upload-zone:hover {
+  border-color: var(--primary);
+  background: var(--primary-l);
+}
+.upload-zone-icon { font-size: 2.8rem; margin-bottom: 0.6rem; }
+.upload-zone h3 {
+  font-size: 0.95rem; font-weight: 600; color: var(--muted);
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: linear-gradient(135deg, var(--primary), #6D28D9);
+  color: #fff; border: none; padding: .75rem 2rem; border-radius: 50px;
+  font-size: 0.95rem; font-weight: 700; cursor: pointer;
+  transition: all .25s ease; justify-content: center;
+  font-family: inherit; letter-spacing: 0.3px;
+}
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(67,56,202,0.35);
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+.btn-saffron {
+  background: linear-gradient(135deg, var(--saffron), #D97706);
+}
+.btn-saffron:hover:not(:disabled) { box-shadow: 0 8px 24px rgba(245,158,11,0.35); }
+
+.btn-teal {
+  background: linear-gradient(135deg, var(--teal), #0F766E);
+}
+.btn-teal:hover:not(:disabled) { box-shadow: 0 8px 24px rgba(13,148,136,0.35); }
+
+.btn-sm {
+  padding: 0.45rem 1rem; font-size: 0.8rem; border-radius: 25px;
+}
+.btn-ghost {
+  background: transparent; border: 1.5px solid var(--border); color: var(--muted);
+}
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--primary); color: var(--primary);
+  box-shadow: 0 4px 12px rgba(67,56,202,0.12);
+}
+
+/* ── Progress card ── */
+.progress-card {
+  display: none;
+  background: var(--card); border: 1.5px solid var(--border);
+  border-radius: 20px; padding: 3rem 2rem; text-align: center;
+  box-shadow: 0 4px 20px rgba(67,56,202,0.06);
+}
+.ring-wrap { position:relative; width:110px; height:110px; margin:0 auto 1.2rem; }
+.ring { transform: rotate(-90deg); }
+.ring-track { fill:none; stroke:#EEE8DE; stroke-width:10; }
+.ring-fill {
+  fill:none; stroke:url(#ringGrad); stroke-width:10;
+  stroke-linecap:round; stroke-dasharray:314; stroke-dashoffset:314;
+  transition: stroke-dashoffset .5s ease;
+}
+.ring-pct {
+  position:absolute; inset:0; display:flex; align-items:center;
+  justify-content:center; font-weight:800; font-size:1.3rem; color: var(--primary);
+}
+.prog-label {
+  font-size: 1.1rem; font-weight: 700; color: var(--text);
+  font-family: 'Caveat', cursive;
+}
+.prog-log { color: var(--muted); font-size: 0.85rem; margin-top: 0.4rem; }
+
+/* ── Results layout ── */
+.result-layout {
+  display: none; grid-template-columns: 1fr 400px; gap: 1.5rem;
+  animation: riseUp .5s ease both;
+}
+@media(max-width:900px) { .result-layout { grid-template-columns: 1fr; } }
+.main-col { display:flex; flex-direction:column; gap:1.5rem; }
+.sidebar   { display:flex; flex-direction:column; gap:1.5rem; }
+
+.video-player {
+  width:100%; aspect-ratio:16/9; background:#1E1B4B; border-radius:0;
+}
+.video-info {
+  padding: 1rem 1.4rem; display:flex; align-items:center;
+  justify-content:space-between; background: var(--saffron-l);
+  border-top: 1.5px solid #FDE68A;
+}
+.video-status { font-size:0.85rem; color: #92400E; font-weight:600; }
+
+/* ── Transcript side-by-side ── */
+.transcript-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-top: 1.5px solid var(--border);
+}
+.transcript-col { padding: 1.2rem 1.4rem; }
+.transcript-col:first-child { border-right: 1.5px solid var(--border); }
+.transcript-label {
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 1.5px;
+  text-transform: uppercase; margin-bottom: 0.6rem;
+}
+.transcript-text {
+  font-size: 0.88rem; color: var(--muted); max-height: 180px;
+  overflow-y: auto; line-height: 1.6;
+}
+
+/* ── Tabs ── */
+.tab-bar {
+  display: flex; gap: 0; background: var(--bg2);
+  border-bottom: 1.5px solid var(--border);
+}
+.tab-btn {
+  flex: 1; padding: 0.85rem 0.5rem; background: none; border: none;
+  border-bottom: 3px solid transparent; color: var(--muted);
+  font-family: inherit; font-size: 0.78rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer;
+  transition: all .2s ease;
+}
+.tab-btn:hover { color: var(--primary); background: rgba(67,56,202,0.04); }
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #fff; }
+
+/* ── Summary ── */
+.summary-controls {
+  padding: 0.8rem 1.2rem; display:flex; align-items:center;
+  justify-content:space-between; border-bottom:1.5px solid var(--border);
+  background: var(--primary-l); font-size:0.78rem; color:var(--primary); font-weight:600;
+}
+.mini-select {
+  background: #fff; border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 0.3rem 0.6rem; color: var(--text); font-family:inherit;
+  font-size: 0.8rem; cursor:pointer;
+}
+.summary-box { padding: 1.2rem 1.4rem; }
+.summary-list ul { list-style: none; display:flex; flex-direction:column; gap:0.6rem; }
+.summary-list li {
+  padding: 0.7rem 1rem; background: var(--saffron-l);
+  border-radius: 10px; border-left: 4px solid var(--saffron);
+  font-size: 0.9rem; line-height: 1.5; color: #78350F;
+}
+
+/* ── Quiz ── */
+.quiz-wrap { padding: 1.2rem; display:flex; flex-direction:column; gap:1rem; }
+.quiz-header { display:flex; justify-content:space-between; font-size:0.75rem; font-weight:700; color:var(--muted); text-transform:uppercase; }
+.quiz-q { font-size:0.95rem; font-weight:600; line-height:1.5; color:var(--text); }
+.quiz-choices { display:flex; flex-direction:column; gap:0.55rem; }
+.quiz-choice {
+  display:flex; align-items:center; gap:0.8rem; padding:0.75rem 1rem;
+  border-radius:12px; border:1.5px solid var(--border); cursor:pointer;
+  transition:all .2s; background:#fafafa; font-size:0.85rem; color:var(--text);
+}
+.quiz-choice:hover  { border-color:var(--primary); background:var(--primary-l); }
+.quiz-choice.selected { border-color:var(--primary); background:var(--primary-l); }
+.quiz-choice.correct  { border-color:var(--teal); background:var(--teal-l); color:#134E4A; }
+.quiz-choice.incorrect { border-color:var(--rose); background:var(--rose-l); color:#881337; }
+.quiz-choice input { accent-color:var(--primary); }
+.quiz-feedback {
+  display:none; padding:0.9rem; border-radius:12px; font-size:0.85rem; line-height:1.5;
+}
+.quiz-score-badge {
+  font-size:2rem; text-align:center; margin-bottom:0.3rem;
+}
+
+/* ── Notes ── */
+.notes-controls {
+  padding: 0.8rem 1.2rem; display:flex; align-items:center; gap:0.8rem;
+  border-bottom: 1.5px solid var(--border); background: var(--bg2);
+  flex-wrap: wrap;
+}
+.notes-lang-label {
+  font-size: 0.7rem; color: var(--muted); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.notes-body {
+  padding: 1rem 1.2rem; max-height: 430px; overflow-y: auto;
+  font-size: 0.85rem; line-height: 1.75;
+}
+.notes-header-bar {
+  padding: 0.7rem 1.2rem; background: var(--primary-l);
+  border-bottom: 1.5px solid #C7D2FE;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.notes-lang-tag {
+  font-size:0.72rem; color:var(--primary); font-weight:700;
+  text-transform:uppercase; letter-spacing:1px;
+}
+.notes-loader {
+  display:none; text-align:center; padding:2.5rem 1rem;
+}
+.spinner {
+  width:36px; height:36px; border:3px solid #EEE8DE;
+  border-top:3px solid var(--primary); border-radius:50%;
+  animation:spin 1s linear infinite; margin:0 auto 12px;
+}
+.notes-empty {
+  text-align:center; padding:2.2rem 1rem; color:var(--muted);
+}
+.notes-empty-icon { font-size:2.5rem; margin-bottom:0.6rem; }
+
+/* ── Chat ── */
+.chat-msgs {
+  height:280px; overflow-y:auto; display:flex; flex-direction:column;
+  gap:0.6rem; padding:1.2rem; scroll-behavior:smooth;
+}
+.msg { padding:0.8rem 1rem; border-radius:16px; max-width:88%; font-size:0.88rem; line-height:1.5; }
+.msg-user {
+  background: linear-gradient(135deg,var(--primary),#6D28D9);
+  color:#fff; align-self:flex-end; border-radius:16px 16px 4px 16px;
+}
+.msg-ai {
+  background: var(--saffron-l); border:1.5px solid #FDE68A;
+  color:#78350F; align-self:flex-start; border-radius:16px 16px 16px 4px;
+}
+.chat-footer { padding:0.8rem 1.2rem; border-top:1.5px solid var(--border); background:var(--bg2); }
+.chat-input-row { display:flex; gap:0.5rem; align-items:center; }
+.chat-input {
+  flex:1; background:#fff; border:1.5px solid var(--border); border-radius:25px;
+  padding:0.6rem 1rem; color:var(--text); font-family:inherit; font-size:0.9rem; outline:none;
+  transition: border-color .2s;
+}
+.chat-input:focus { border-color:var(--primary); }
+.chat-lang-row { display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; color:var(--muted); }
+.mic-btn {
+  width:40px; height:40px; border-radius:50%; border:1.5px solid var(--border);
+  background:#fff; cursor:pointer; font-size:1rem; display:flex;
+  align-items:center; justify-content:center; transition:all .2s;
+}
+.mic-btn:hover, .mic-btn.active { background:var(--rose); border-color:var(--rose); }
+
+/* ── Reference tab styles ── */
+.ref-section-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  padding: 0.9rem 1.2rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.book-card {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  padding: 0.8rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.book-card:hover { background: var(--bg); }
+.book-icon {
+  font-size: 1.5rem;
+  background: var(--primary-l);
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.book-info h4 {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.3;
+}
+.book-info p {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 0.1rem;
+}
+.book-meta {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.3rem;
+}
+.book-tag {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.1rem 0.5rem;
+  border-radius: 100px;
+  background: var(--primary-l);
+  color: var(--primary);
+}
+.book-tag.pub { background: var(--saffron-l); color: #92400E; }
+.book-search-btn {
+  margin-left: auto;
+  font-size: 0.65rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 100px;
+  background: none;
+  border: 1.5px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+.book-search-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.topic-group {
+  padding: 0.8rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+}
+.topic-group-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  display: flex; align-items: center; gap: 0.35rem;
+}
+.article-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.article-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 100px;
+  border: 1.5px solid;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.article-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+.ref-loader {
+  text-align: center;
+  padding: 2.5rem 1rem;
+}
+.ref-empty {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* ── Scrollbars ── */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:var(--bg2); }
+::-webkit-scrollbar-thumb { background:#C4B5A0; border-radius:3px; }
+
+/* ── Feature pills in hero ── */
+.feature-pills {
+  display:flex; flex-wrap:wrap; gap:0.6rem; justify-content:center;
+  margin-top:1.2rem;
+}
+.f-pill {
+  background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25);
+  border-radius:100px; padding:0.3rem 0.9rem; font-size:0.72rem;
+  color:rgba(255,255,255,0.9); font-weight:600;
+  backdrop-filter:blur(4px);
+}
+/* ── Sidebar Navigation Layout ── */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, #1E1B4B 0%, #312E81 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; bottom: 0; left: 0;
+  z-index: 100;
+  padding: 1.8rem 1.2rem;
+  border-right: 1.5px solid var(--border);
+  box-shadow: 4px 0 25px rgba(30, 27, 75, 0.15);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-brand h2 {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+.sidebar-brand h2 span {
+  color: #FCD34D;
+}
+
+.brand-logo {
+  font-size: 1.8rem;
+}
+
+.app-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.app-sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  margin-top: 1rem;
+}
+
+.app-sidebar-item button {
+  width: 100%;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+}
+
+.app-sidebar-item button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  transform: translateX(4px);
+}
+
+.app-sidebar-item.active button {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(67, 56, 202, 0.45);
+}
+
+.app-sidebar-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.sdg-mini-badge {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.main-viewport {
+  margin-left: 260px;
+  flex: 1;
+  padding: 2.2rem 2.5rem;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header style */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1.5px solid var(--border);
+  padding-bottom: 1.2rem;
+}
+
+.header-title h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+.header-title p {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+
+.header-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  padding: 0.45rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.stat-emoji {
+  font-size: 1rem;
+}
+
+.stat-label {
+  color: var(--muted);
+}
+
+.stat-value {
+  color: var(--primary);
+}
+
+/* Panels */
+.view-panel {
+  display: none;
+  animation: fadeIn 0.4s ease both;
+  flex-grow: 1;
+}
+
+.view-panel.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Sub-views inside Library */
+.library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Progress Dashboard CSS */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  box-shadow: 0 4px 15px rgba(67, 56, 202, 0.04);
+}
+
+.stat-card-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+
+.stat-card-icon.purple { background: var(--primary-l); color: var(--primary); }
+.stat-card-icon.orange { background: var(--saffron-l); color: var(--saffron); }
+.stat-card-icon.teal { background: var(--teal-l); color: var(--teal); }
+.stat-card-icon.rose { background: var(--rose-l); color: var(--rose); }
+
+.stat-card-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-card-num {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.stat-card-lbl {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 0.15rem;
+}
+
+/* Subject mastery list */
+.subject-mastery-card {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(67, 56, 202, 0.04);
+}
+
+.mastery-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+
+.mastery-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.mastery-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.mastery-progress-bar {
+  height: 8px;
+  background: var(--bg2);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.mastery-progress-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.8s ease-out;
+}
+
+/* Achievements styles */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+  margin-top: 1rem;
+}
+
+.achievement-card {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 1.2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.achievement-card.locked {
+  opacity: 0.55;
+  filter: grayscale(1);
+}
+
+.achievement-card.unlocked {
+  border-color: var(--teal);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.06);
+}
+
+.achievement-card-icon {
+  font-size: 2.2rem;
+}
+
+.achievement-card-info h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.achievement-card-info p {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.achievement-badge-status {
+  position: absolute;
+  top: 8px; right: 8px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.15rem 0.45rem;
+  border-radius: 100px;
+}
+
+.status-unlocked { background: var(--teal-l); color: var(--teal); }
+.status-locked { background: var(--bg2); color: var(--muted); }
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .app-sidebar {
+    width: 240px;
+  }
+  .main-viewport {
+    margin-left: 240px;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+  .app-sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 1rem;
+    border-right: none;
+    border-bottom: 1.5px solid var(--border);
+  }
+  .app-sidebar-menu {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  .app-sidebar-item button {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  .main-viewport {
+    margin-left: 0;
+    padding: 1.2rem 1rem;
+  }
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .header-stats {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+.history-item {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+}
+.history-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  box-shadow: 0 4px 15px rgba(67,56,202,0.08);
+  background: #FFFDFC;
+}
+.history-item-title {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+.history-item-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.history-badge {
+  padding: 0.15rem 0.6rem;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+}
+.badge-cs { background: #EEF2FF; color: #4F46E5; border: 1px solid #C7D2FE; }
+.badge-math { background: #FEF3C7; color: #D97706; border: 1px solid #FDE68A; }
+.badge-physics_chem { background: #ECFDF5; color: #059669; border: 1px solid #A7F3D0; }
+.badge-biology { background: #FDF2F8; color: #DB2777; border: 1px solid #FBCFE8; }
+.badge-general { background: #F3F4F6; color: #4B5563; border: 1px solid #E5E7EB; }
+
+.badge-lang {
+  background: var(--primary-l);
+  color: var(--primary);
+  font-weight: bold;
+}
+
+/* ── Home Page Layout ── */
+.home-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+@media (max-width: 900px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.home-section-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── SDG 9 Hero Banner ── */
+.sdg9-hero {
+  background: linear-gradient(135deg, #1E3A5F 0%, #1a4a6e 40%, #0D9488 100%);
+  border-radius: 22px;
+  padding: 2.2rem 2rem;
+  margin-bottom: 1.8rem;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(13,148,136,0.2);
+}
+.sdg9-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 180px; height: 180px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+}
+.sdg9-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: -30px;
+  width: 220px; height: 220px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+}
+.sdg9-hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 100px;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  backdrop-filter: blur(4px);
+}
+.sdg9-hero h2 {
+  font-size: 1.9rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  margin-bottom: 0.8rem;
+}
+.sdg9-hero h2 em {
+  font-style: normal;
+  color: #FCD34D;
+}
+.sdg9-hero p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.85);
+  max-width: 480px;
+}
+.sdg9-hero-num {
+  position: absolute;
+  top: 1.5rem; right: 1.8rem;
+  font-size: 5rem;
+  font-weight: 900;
+  color: rgba(255,255,255,0.08);
+  line-height: 1;
+  z-index: 0;
+  user-select: none;
+}
+.sdg9-targets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.2rem;
+}
+.sdg9-target-pill {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 100px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+}
+
+/* ── How project relates ── */
+.relation-card {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.relation-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+}
+.relation-card.c-indigo::before { background: var(--primary); }
+.relation-card.c-teal::before { background: var(--teal); }
+.relation-card.c-saffron::before { background: var(--saffron); }
+.relation-card.c-rose::before { background: var(--rose); }
+.relation-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(67,56,202,0.07);
+}
+.relation-icon {
+  font-size: 1.6rem;
+  background: var(--primary-l);
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.relation-icon.teal { background: var(--teal-l); }
+.relation-icon.saffron { background: var(--saffron-l); }
+.relation-icon.rose { background: var(--rose-l); }
+.relation-info h4 {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+.relation-info p {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.sdg-card {
+  background: linear-gradient(135deg, var(--primary-l) 0%, #fff 100%);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 1.4rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 4px 15px rgba(67,56,202,0.04);
+}
+
+.sdg-card.saffron {
+  background: linear-gradient(135deg, var(--saffron-l) 0%, #fff 100%);
+}
+
+.sdg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+}
+
+.sdg-badge {
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+}
+
+.sdg-badge.saffron {
+  background: var(--saffron);
+}
+
+.sdg-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── Features Grid ── */
+.features-full-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+@media (max-width: 1200px) {
+  .features-full-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.feature-highlight-card {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 1.2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  transition: all 0.25s ease;
+}
+
+.feature-highlight-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(67,56,202,0.08);
+}
+
+.feature-highlight-icon {
+  font-size: 1.8rem;
+  background: var(--primary-l);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.feature-highlight-icon.saffron { background: var(--saffron-l); }
+.feature-highlight-icon.teal { background: var(--teal-l); }
+.feature-highlight-icon.rose { background: var(--rose-l); }
+.feature-highlight-icon.green { background: #DCFCE7; }
+.feature-highlight-icon.blue { background: #DBEAFE; }
+
+.feature-highlight-info h3 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.feature-highlight-info p {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+  line-height: 1.4;
+}
+
+/* Auth form enhanced */
+.auth-welcome-banner {
+  background: linear-gradient(135deg, #4338CA, #6D28D9);
+  padding: 1.4rem 1.8rem;
+  color: #fff;
+  text-align: center;
+}
+.auth-welcome-banner h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+.auth-welcome-banner p {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.8);
+  margin-top: 0.3rem;
+}
+.auth-welcome-icons {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+.auth-welcome-icons span {
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Auth Card and tabs */
+.auth-tab-bar {
+  display: flex;
+  border-bottom: 1.5px solid var(--border);
+}
+
+.auth-tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 1rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.auth-tab-btn.active {
+  color: var(--primary);
+  border-bottom: 3px solid var(--primary);
+  background: rgba(67, 56, 202, 0.02);
+}
+
+.auth-form-wrap {
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.profile-card {
+  padding: 2rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.2rem;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--primary-l);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  border: 3px solid var(--primary);
+}
+
+/* View locking overlay */
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(253, 250, 243, 0.88);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  border-radius: 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="app-layout">
+  <!-- ── Sidebar Navigation ── -->
+  <aside class="app-sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-logo">🎓</span>
+      <h2>Vidya<span>Vaani</span></h2>
+    </div>
+    
+    <div class="squiggle" style="margin-bottom: 1.5rem; opacity: 0.3;"></div>
+    
+    <nav class="app-sidebar-nav">
+      <ul class="app-sidebar-menu">
+        <li class="app-sidebar-item active" id="nav-home">
+          <button onclick="switchView('home')">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-text">Home</span>
+          </button>
+        </li>
+        <li class="app-sidebar-item" id="nav-upload">
+          <button onclick="switchView('upload')">
+            <span class="nav-icon">🎥</span>
+            <span class="nav-text">Upload &amp; Translate</span>
+          </button>
+        </li>
+        <li class="app-sidebar-item" id="nav-library">
+          <button onclick="switchView('library')">
+            <span class="nav-icon">📚</span>
+            <span class="nav-text">Study Library</span>
+          </button>
+        </li>
+        <li class="app-sidebar-item" id="nav-quizzes">
+          <button onclick="switchView('quizzes')">
+            <span class="nav-icon">🧠</span>
+            <span class="nav-text">Quiz Center</span>
+          </button>
+        </li>
+        <li class="app-sidebar-item" id="nav-tutor">
+          <button onclick="switchView('tutor')">
+            <span class="nav-icon">🤖</span>
+            <span class="nav-text">AI Tutor</span>
+          </button>
+        </li>
+        <li class="app-sidebar-item" id="nav-progress">
+          <button onclick="switchView('progress')">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Progress &amp; Stats</span>
+          </button>
+        </li>
+        <li class="app-sidebar-item" id="nav-tests">
+          <button onclick="switchView('tests')">
+            <span class="nav-icon">📝</span>
+            <span class="nav-text">Subjective Tests</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+    
+    <!-- Sidebar Footer -->
+    <div class="app-sidebar-footer">
+      <div class="sdg-mini-badge">
+        <span>🌍 SDG 4 — Quality Education</span>
+        <span style="font-size: 0.65rem; opacity: 0.7; font-weight: 500;">AI-Powered Multilingual Learning</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main Viewport ── -->
+  <main class="main-viewport">
+    
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-title">
+        <h1 id="view-title">🎓 VidyaVaani</h1>
+        <p id="view-tagline">Welcome to VidyaVaani — Multilingual Educational Hub</p>
+      </div>
+      
+      <div class="header-stats">
+        <div class="stat-badge" title="Keep learning daily to grow your streak!">
+          <span class="stat-emoji">🔥</span>
+          <span class="stat-label">Streak:</span>
+          <span id="header-streak-val" class="stat-value">1 Day</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── View Panels ── -->
+    
+    <!-- View 0: Home Panel -->
+    <div class="view-panel active" id="panel-home">
+      
+      <!-- ── SDG 4 Hero Banner ── -->
+      <div class="sdg9-hero">
+        <div style="position: relative; z-index: 1;">
+          <div class="sdg9-hero-tag">🌍 UN Sustainable Development Goal</div>
+          <div class="sdg9-hero-num">4</div>
+          <h2>SDG 4 — <em>Quality Education</em><br>For Every Student</h2>
+          <p>VidyaVaani is built on the principle that every student, regardless of language or location, deserves access to world-class education. Using cutting-edge AI, we break the language barrier that locks millions out of quality learning.</p>
+          <div class="sdg9-targets">
+            <span class="sdg9-target-pill">🎯 Multilingual Access</span>
+            <span class="sdg9-target-pill">🤖 AI-Powered Learning</span>
+            <span class="sdg9-target-pill">🏫 Remote Education</span>
+            <span class="sdg9-target-pill">📱 Digital Inclusion</span>
+            <span class="sdg9-target-pill">🌐 5 Indian Languages</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two-column layout -->
+      <div class="home-grid">
+        <!-- Left: SDG info + Features -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+          <!-- How our project relates to SDG 9 -->
+          <div>
+            <h3 class="home-section-title">🔗 How VidyaVaani Advances SDG 4</h3>
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+              
+              <div class="relation-card c-indigo">
+                <div class="relation-icon">🎤</div>
+                <div class="relation-info">
+                  <h4>AI-Powered Language Access</h4>
+                  <p>Our <strong>IndicTrans2</strong> translation engine and <strong>faster-whisper</strong> transcription make English lectures instantly accessible in Kannada, Hindi, Tamil, Telugu, and Malayalam — covering over 600 million speakers.</p>
+                </div>
+              </div>
+
+              <div class="relation-card c-teal">
+                <div class="relation-icon teal">🏫</div>
+                <div class="relation-info">
+                  <h4>Offline-Ready for Remote Schools</h4>
+                  <p>Built with locally deployed <strong>Mistral LLMs</strong>, VidyaVaani works without relying on cloud APIs — making it deployable in rural schools with limited or no internet connectivity.</p>
+                </div>
+              </div>
+
+              <div class="relation-card c-saffron">
+                <div class="relation-icon saffron">📊</div>
+                <div class="relation-info">
+                  <h4>Personalized & Inclusive Pedagogy</h4>
+                  <p>Auto-generated <strong>smart notes</strong>, <strong>comprehension quizzes</strong>, and an <strong>AI tutor</strong> ensure every student can learn at their own pace and revisit concepts in their mother tongue.</p>
+                </div>
+              </div>
+
+              <div class="relation-card c-rose">
+                <div class="relation-icon rose">🔬</div>
+                <div class="relation-info">
+                  <h4>Innovation in Educational Infrastructure</h4>
+                  <p>Combining <strong>speech recognition</strong>, <strong>neural TTS translation</strong>, and <strong>domain-specific glossaries</strong> (CS, Physics, Biology, Maths), we build a robust, scalable academic knowledge pipeline.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- All Platform Features -->
+          <div>
+            <h3 class="home-section-title">✨ Platform Features</h3>
+            <div class="features-full-grid">
+              <div class="feature-highlight-card">
+                <div class="feature-highlight-icon">🎥</div>
+                <div class="feature-highlight-info">
+                  <h3>AI Video Translation</h3>
+                  <p>Upload any lecture video and translate it into 5 Indian languages with realistic voices.</p>
+                </div>
+              </div>
+              <div class="feature-highlight-card">
+                <div class="feature-highlight-icon saffron">📄</div>
+                <div class="feature-highlight-info">
+                  <h3>Bilingual Transcripts</h3>
+                  <p>View side-by-side source and translated transcripts for any processed video.</p>
+                </div>
+              </div>
+              <div class="feature-highlight-card">
+                <div class="feature-highlight-icon teal">📝</div>
+                <div class="feature-highlight-info">
+                  <h3>Mistral Smart Notes</h3>
+                  <p>AI-generated revision notes and summaries, downloadable as PDF.</p>
+                </div>
+              </div>
+              <div class="feature-highlight-card">
+                <div class="feature-highlight-icon rose">🧠</div>
+                <div class="feature-highlight-info">
+                  <h3>Comprehension Quizzes</h3>
+                  <p>Auto-generated MCQ quizzes from lecture content with instant scoring.</p>
+                </div>
+              </div>
+              <div class="feature-highlight-card">
+                <div class="feature-highlight-icon green">🤖</div>
+                <div class="feature-highlight-info">
+                  <h3>AI Tutor Chat</h3>
+                  <p>Ask questions about any lecture in your own language with voice support.</p>
+                </div>
+              </div>
+              <div class="feature-highlight-card">
+                <div class="feature-highlight-icon blue">📊</div>
+                <div class="feature-highlight-info">
+                  <h3>Progress Analytics</h3>
+                  <p>Track your learning streak, quiz accuracy, and mastery across subjects.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Auth Card -->
+        <div>
+          <div class="edu-card" id="authCard" style="overflow: hidden; position: sticky; top: 1.5rem;">
+
+            <!-- Auth welcome banner -->
+            <div class="auth-welcome-banner">
+              <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🎓</div>
+              <h3>Join VidyaVaani</h3>
+              <p>Your multilingual AI learning companion</p>
+              <div class="auth-welcome-icons">
+                <span>🌐 5 Languages</span>
+                <span>🤖 AI Tutor</span>
+                <span>📊 Analytics</span>
+              </div>
+            </div>
+
+            <div class="auth-tab-bar">
+              <button class="auth-tab-btn active" id="authTabSignIn" onclick="toggleAuthTab('signin')">🔑 Sign In</button>
+              <button class="auth-tab-btn" id="authTabRegister" onclick="toggleAuthTab('register')">🚀 Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <div class="auth-form-wrap" id="authFormSignIn">
+              <h3 style="font-weight: 800; font-size: 1.05rem; color: var(--text);">Welcome Back, Student!</h3>
+              <p style="font-size: 0.78rem; color: var(--muted); margin-top: -0.5rem;">Sign in to continue your learning journey.</p>
+
+              <div class="input-group">
+                <label>Student Username</label>
+                <input type="text" id="signinUser" class="chat-input" style="border-radius: 12px; padding: 0.65rem 0.9rem;" placeholder="e.g. teststudent">
+              </div>
+              <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="signinPass" class="chat-input" style="border-radius: 12px; padding: 0.65rem 0.9rem;" placeholder="••••••••">
+              </div>
+
+              <button class="btn btn-saffron" onclick="handleDummySignIn()" style="margin-top: 0.5rem; width: 100%; font-weight: 700;">
+                🔑 Sign In to Platform
+              </button>
+
+              <div class="squiggle" style="opacity: 0.4;"></div>
+
+              <div style="background: var(--primary-l); border: 1px solid #C7D2FE; border-radius: 12px; padding: 0.9rem; font-size: 0.76rem; line-height: 1.5; color: var(--primary);">
+                💡 <strong>Demo Account:</strong><br>
+                Username: <strong>teststudent123</strong><br>
+                Password: <strong>password123</strong>
+              </div>
+            </div>
+
+            <!-- Register Form -->
+            <div class="auth-form-wrap" id="authFormRegister" style="display: none;">
+              <h3 style="font-weight: 800; font-size: 1.05rem; color: var(--text);">Create Your Profile</h3>
+              <p style="font-size: 0.78rem; color: var(--muted); margin-top: -0.5rem;">Start your personalized learning journey today.</p>
+
+              <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="registerName" class="chat-input" style="border-radius: 12px; padding: 0.65rem 0.9rem;" placeholder="e.g. Bharath Kumar">
+              </div>
+              <div class="input-group">
+                <label>Choose Username</label>
+                <input type="text" id="registerUser" class="chat-input" style="border-radius: 12px; padding: 0.65rem 0.9rem;" placeholder="e.g. bharath_student">
+              </div>
+              <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="registerPass" class="chat-input" style="border-radius: 12px; padding: 0.65rem 0.9rem;" placeholder="Min 8 characters">
+              </div>
+              <div class="input-group">
+                <label>Confirm Password</label>
+                <input type="password" id="registerConfirmPass" class="chat-input" style="border-radius: 12px; padding: 0.65rem 0.9rem;" placeholder="Re-enter password">
+              </div>
+              <div class="input-group">
+                <label>Preferred Language</label>
+                <select style="border-radius: 12px; padding: 0.65rem 0.9rem; font-family: inherit; font-size: 0.88rem;">
+                  <option>ಕನ್ನಡ — Kannada</option>
+                  <option>हिन्दी — Hindi</option>
+                  <option>தமிழ் — Tamil</option>
+                  <option>తెలుగు — Telugu</option>
+                  <option>മലയാളം — Malayalam</option>
+                  <option>English</option>
+                </select>
+              </div>
+
+              <button class="btn btn-teal" onclick="handleDummyRegister()" style="margin-top: 0.5rem; width: 100%; font-weight: 700;">
+                🚀 Create Account — It's Free!
+              </button>
+            </div>
+
+            <!-- Profile Dashboard (shown when logged in) -->
+            <div class="profile-card" id="authProfileDashboard" style="display: none;">
+              <div class="profile-avatar" id="profileAvatarIcon">🎓</div>
+              <div>
+                <h3 style="font-weight: 800; font-size: 1.3rem; color: var(--text);" id="profileWelcomeUser">Welcome, Student!</h3>
+                <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.2rem;">VidyaVaani — Active Session</p>
+              </div>
+
+              <div class="squiggle" style="opacity: 0.4;"></div>
+
+              <div style="display: flex; flex-direction: column; width: 100%; gap: 0.8rem; text-align: left;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; border-bottom: 1.5px solid var(--border); padding-bottom: 0.4rem;">
+                  <span style="color: var(--muted); font-weight: 600;">Status:</span>
+                  <span style="color: var(--teal); font-weight: 800;">Active Session ✅</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; border-bottom: 1.5px solid var(--border); padding-bottom: 0.4rem;">
+                  <span style="color: var(--muted); font-weight: 600;">Current User:</span>
+                  <span id="profileUsernameVal" style="color: var(--text); font-weight: 700;">teststudent</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                  <span style="color: var(--muted); font-weight: 600;">Streak:</span>
+                  <span id="profileStreakVal" style="color: var(--saffron); font-weight: 800;">🔥 1 Day</span>
+                </div>
+              </div>
+
+              <button class="btn btn-ghost btn-sm" onclick="handleDummySignOut()" style="width: 100%; margin-top: 1rem; border-color: var(--rose); color: var(--rose);">
+                🚪 Sign Out
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View 1: Upload Panel -->
+    <div class="view-panel" id="panel-upload">
+      <div class="edu-card" id="setupCard">
+        <div class="card-head">
+          <h2>🎥 Upload &amp; Configure</h2>
+          <span style="font-family:'Caveat',cursive; color:var(--muted); font-size:1rem;">Choose your video &amp; target language</span>
+        </div>
+        <div class="setup-wrap">
+          <div class="lang-row">
+            <div class="input-group">
+              <label>Target Language</label>
+              <select id="tgtLang">
+                <option value="kn">ಕನ್ನಡ — Kannada</option>
+                <option value="hi">हिन्दी — Hindi</option>
+                <option value="ta">தமிழ் — Tamil</option>
+                <option value="te">తెలుగు — Telugu</option>
+                <option value="ml">മലയാളം — Malayalam</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Subject Domain (Glossary)</label>
+              <select id="domainGlossary">
+                <option value="general">🌍 General / Mixed</option>
+                <option value="cs">💻 Computer Science &amp; IT</option>
+                <option value="physics_chem">⚛️ Physics &amp; Chemistry</option>
+                <option value="math">📐 Mathematics</option>
+                <option value="biology">🧬 Biology &amp; Medicine</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Voice Style</label>
+              <select id="voiceGender">
+                <option value="male">🗣 Male Voice</option>
+                <option value="female">🗣 Female Voice</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="upload-zone" id="uploadZone">
+            <div class="upload-zone-icon">🎥</div>
+            <h3 id="fileLabel">Drop your video here or click to browse</h3>
+            <p style="font-size:0.78rem; color:var(--muted); margin-top:0.4rem;">Supports MP4, AVI, MOV · Max 500MB</p>
+            <input type="file" id="fileInput" accept="video/*" style="display:none;">
+          </div>
+
+          <div class="squiggle"></div>
+
+          <button class="btn" id="startBtn" disabled style="align-self:flex-start;">
+            🚀 Start Translation
+          </button>
+        </div>
+      </div>
+      
+      <!-- Upload progress -->
+      <div class="progress-card" id="progressCard" style="margin-top: 1.5rem;">
+        <div class="ring-wrap">
+          <svg class="ring" width="110" height="110" viewBox="0 0 110 110">
+            <defs>
+              <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#4338CA"/>
+                <stop offset="100%" stop-color="#0D9488"/>
+              </linearGradient>
+            </defs>
+            <circle class="ring-track" cx="55" cy="55" r="45"/>
+            <circle id="ringFill" class="ring-fill" cx="55" cy="55" r="45"/>
+          </svg>
+          <div id="ringPct" class="ring-pct">0%</div>
+        </div>
+        <div id="progLabel" class="prog-label">Preparing...</div>
+        <p id="progLog" class="prog-log"></p>
+      </div>
+    </div>
+
+    <!-- View 2: Study Library Panel -->
+    <div class="view-panel" id="panel-library">
+      
+      <!-- Library List Grid -->
+      <div id="library-list-mode">
+        <div class="edu-card">
+          <div class="card-head">
+            <h2>📚 My Study Library</h2>
+            <span style="font-family:'Caveat',cursive; color:var(--teal); font-size:1.1rem;">Select a topic below to recap</span>
+          </div>
+          <div style="padding: 1.5rem;">
+            <div class="library-grid" id="libraryGrid">
+              <!-- Filled dynamically by JavaScript -->
+            </div>
+            <div id="libraryEmptyState" style="text-align: center; padding: 4rem 2rem; display: none;">
+              <p style="color:var(--muted); font-size:1.2rem; font-family:'Caveat',cursive;">
+                ✨ No topics studied yet. Go to "Upload &amp; Translate" to process your first video!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Library Topic Detail Study Mode -->
+      <div id="library-detail-mode" style="display: none;">
+        <button class="btn btn-ghost btn-sm" onclick="showLibraryGrid()" style="margin-bottom: 1.2rem; font-weight: 600;">
+          ← Back to Library List
+        </button>
+        
+        <div class="result-layout" id="resultCard" style="display: grid;">
+          <!-- Main Column -->
+          <div class="main-col">
+            <!-- Translated Video -->
+            <div class="edu-card">
+              <div class="card-head">
+                <h2 id="study-topic-title">🎬 Translated Video</h2>
+                <span style="font-family:'Caveat',cursive;color:var(--teal);font-size:1rem;">Ready to play!</span>
+              </div>
+              <video id="translatedVideo" class="video-player" controls></video>
+              <div class="video-info">
+                <span id="translatedStatus" class="video-status">🎧 Translated successfully</span>
+                <a id="downloadLink" class="btn btn-sm btn-saffron" download>⬇ Download</a>
+              </div>
+            </div>
+
+            <!-- Transcript -->
+            <div class="edu-card">
+              <div class="card-head">
+                <h2>📄 Transcript</h2>
+              </div>
+              <div class="transcript-grid">
+                <div class="transcript-col">
+                  <div class="transcript-label" style="color:var(--teal);">🔤 Source (English)</div>
+                  <div id="srcText" class="transcript-text"></div>
+                </div>
+                <div class="transcript-col">
+                  <div id="tgtLabel" class="transcript-label" style="color:var(--saffron);">🌐 Translated</div>
+                  <div id="tgtText" class="transcript-text" style="font-weight:600; font-size:0.92rem;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar of Result Layout -->
+          <div class="sidebar">
+            <!-- Tabbed Card: Summary / Quiz / Notes -->
+            <div class="edu-card" style="min-height:360px;">
+              <div class="tab-bar">
+                <button id="tabSummaryBtn" class="tab-btn active">📋 Summary</button>
+                <button id="tabQuizBtn" class="tab-btn">🧠 Quiz</button>
+                <button id="tabNotesBtn" class="tab-btn">📝 Notes</button>
+              </div>
+
+              <!-- Summary Tab -->
+              <div id="tabSummaryContent">
+                <div class="summary-controls">
+                  <span>Translate Summary:</span>
+                  <select class="mini-select" id="sumLang">
+                    <option value="en" selected>English</option>
+                    <option value="hi">Hindi</option>
+                    <option value="kn">Kannada</option>
+                    <option value="ta">Tamil</option>
+                  </select>
+                </div>
+                <div class="summary-box">
+                  <div id="summaryText" class="summary-list">Loading summary...</div>
+                  <div class="squiggle" style="margin-top: 1.2rem; opacity: 0.4;"></div>
+                  <div class="ref-section-title" style="padding-left: 0; padding-right: 0; border-bottom: none; font-size: 0.78rem; display: flex; align-items: center; gap: 0.5rem;">📚 Recommended Textbooks</div>
+                  <div id="refsBooksContainer" style="margin-top: 0.5rem; max-height: 190px; overflow-y: auto;">
+                    <div style="font-size:0.8rem; color:var(--muted); text-align:center; padding:1rem;">⏳ Loading textbooks...</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quiz Tab -->
+              <div id="tabQuizContent" style="display:none;">
+                <div id="quizLoader" style="text-align:center; color:var(--muted); padding:2.5rem 1rem;">
+                  <div class="spinner"></div>
+                  <div style="font-size:0.9rem;">Generating quiz from video transcript...</div>
+                </div>
+
+                <div id="quizContainer" class="quiz-wrap" style="display:none;">
+                  <div class="quiz-header">
+                    <span id="quizProgress">Question 1 of 3</span>
+                    <span id="quizScoreText" style="color:var(--teal);">Score: 0</span>
+                  </div>
+                  <div id="quizQuestion" class="quiz-q">Question text?</div>
+                  <div id="quizChoices" class="quiz-choices"></div>
+                  <div id="quizFeedback" class="quiz-feedback">
+                    <div id="quizStatusBadge" style="font-weight:700; margin-bottom:0.3rem;"></div>
+                    <div id="quizExplanation"></div>
+                  </div>
+                  <button id="quizSubmitBtn" class="btn btn-sm" disabled>Submit Answer</button>
+                  <button id="quizNextBtn" class="btn btn-sm btn-teal" style="display:none;">Next Question →</button>
+                </div>
+
+                <div id="quizResultScreen" style="display:none; text-align:center; padding:1.5rem; flex-direction:column; gap:0.8rem; align-items:center;">
+                  <div class="quiz-score-badge">🏆</div>
+                  <h3 style="font-family:'Caveat',cursive; font-size:1.5rem; color:var(--primary);">Quiz Completed!</h3>
+                  <p id="quizFinalScore" style="font-size:0.95rem; color:var(--muted);"></p>
+                  <button id="quizRetryBtn" class="btn btn-sm">Retake Quiz</button>
+                </div>
+              </div>
+
+              <!-- Notes Tab -->
+              <div id="tabNotesContent" style="display:none; flex-direction:column;">
+                <div class="notes-controls">
+                  <span class="notes-lang-label">Language:</span>
+                  <select class="mini-select" id="notesLang" style="flex:1; min-width:130px;">
+                    <option value="en">English</option>
+                    <option value="hi">Hindi (हिन्दी)</option>
+                    <option value="kn">Kannada (ಕನ್ನಡ)</option>
+                    <option value="ta">Tamil (தமிழ்)</option>
+                    <option value="te">Telugu (తెలుగు)</option>
+                    <option value="ml">Malayalam (മലയാളം)</option>
+                  </select>
+                  <button id="generateNotesBtn" class="btn btn-sm btn-saffron">✨ Generate</button>
+                </div>
+
+                <div class="notes-loader" id="notesLoader">
+                  <div class="spinner"></div>
+                  <div style="font-size:0.9rem; color:var(--muted);">Generating notes with Mistral AI...</div>
+                  <div style="font-size:0.78rem; color:var(--muted); margin-top:0.4rem; opacity:0.7;">Takes ~15–30 seconds</div>
+                </div>
+
+                <div class="notes-empty" id="notesEmpty">
+                  <div class="notes-empty-icon">📝</div>
+                  <div style="font-size:0.85rem;">Select a language &amp; click <strong>Generate</strong><br>to create AI study notes for this video.</div>
+                </div>
+
+                <div id="notesContent" style="display:none; flex-direction:column;">
+                  <div class="notes-header-bar">
+                    <span class="notes-lang-tag" id="notesLangLabel">Notes · English</span>
+                    <button id="downloadPdfBtn" class="btn btn-sm btn-teal">⬇ Download PDF</button>
+                  </div>
+                  <div id="notesBody" class="notes-body"></div>
+                </div>
+              </div>
+            </div><!-- end tabbed card -->
+
+            <!-- AI Tutor Chat -->
+            <div class="edu-card" style="flex:1;">
+              <div class="card-head">
+                <h2>🤖 AI Tutor</h2>
+                <div class="chat-lang-row">
+                  Answers in:
+                  <select class="mini-select" id="chatAnsLang">
+                    <option value="en" selected>English</option>
+                    <option value="kn">Kannada</option>
+                    <option value="hi">Hindi</option>
+                    <option value="ta">Tamil</option>
+                  </select>
+                </div>
+              </div>
+              <div class="chat-msgs" id="chatBox">
+                <div class="msg msg-ai">
+                  👋 Namaste! I've analyzed the video. Ask me anything — in any language!
+                </div>
+              </div>
+              <div class="chat-footer">
+                <div class="chat-input-row">
+                  <button class="mic-btn" id="micBtn" title="Speak your question">🎤</button>
+                  <input type="text" class="chat-input" id="chatInput" placeholder="Ask a question about this video...">
+                  <button class="btn btn-sm" id="sendBtn" style="width:42px;height:42px;padding:0;border-radius:50%;">➤</button>
+                </div>
+              </div>
+            </div>
+          </div><!-- end sidebar -->
+        </div><!-- end result-layout -->
+      </div>
+    </div>
+
+    <!-- View 3: Quiz Center Panel -->
+    <div class="view-panel" id="panel-quizzes">
+      <div id="quiz-list-mode">
+        <div class="edu-card">
+          <div class="card-head">
+            <h2>🧠 Quiz Center</h2>
+            <span style="font-family:'Caveat',cursive; color:var(--saffron); font-size:1.1rem;">Test your learning retention</span>
+          </div>
+          <div style="padding: 1.5rem;">
+            <p style="font-size:0.9rem; color:var(--muted); margin-bottom: 1.5rem;">Select any of your studied topics below to start an interactive quiz.</p>
+            <div class="library-grid" id="quizTopicsGrid">
+              <!-- Dynamically populated by JS -->
+            </div>
+            <div id="quizEmptyState" style="text-align: center; padding: 4rem 2rem; display: none;">
+              <p style="color:var(--muted); font-size:1.2rem; font-family:'Caveat',cursive;">
+                ✨ No study topics available yet. Process a video in "Upload &amp; Translate" to get started!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dedicated Active Quiz Arena inside Quiz tab -->
+      <div id="quiz-arena-mode" style="display: none;">
+        <button class="btn btn-ghost btn-sm" onclick="showQuizList()" style="margin-bottom: 1.2rem; font-weight: 600;">
+          ← Back to Quiz List
+        </button>
+        
+        <div class="edu-card" style="max-width: 700px; margin: 0 auto;">
+          <div class="card-head">
+            <h2 id="arena-quiz-title">🧠 Subject Quiz</h2>
+            <span id="arena-quiz-score-display" style="font-family:'Caveat',cursive; color:var(--teal); font-size:1.1rem;">Ready</span>
+          </div>
+          <div class="quiz-wrap" style="padding: 2rem;">
+            <div class="quiz-header" style="margin-bottom: 1rem;">
+              <span id="arena-quizProgress">Question 1 of 3</span>
+              <span id="arena-quizScoreText" style="color:var(--teal); font-weight: 700;">Score: 0</span>
+            </div>
+            <div id="arena-quizQuestion" class="quiz-q" style="font-size: 1.1rem; margin-bottom: 1.5rem;">Question text?</div>
+            <div id="arena-quizChoices" class="quiz-choices" style="margin-bottom: 1.5rem;"></div>
+            <div id="arena-quizFeedback" class="quiz-feedback" style="margin-bottom: 1.5rem; display: none;">
+              <div id="arena-quizStatusBadge" style="font-weight:700; margin-bottom:0.3rem;"></div>
+              <div id="arena-quizExplanation"></div>
+            </div>
+            <button id="arena-quizSubmitBtn" class="btn" disabled style="width: 100%;">Submit Answer</button>
+            <button id="arena-quizNextBtn" class="btn btn-teal" style="display:none; width: 100%;">Next Question →</button>
+          </div>
+          
+          <div id="arena-quizResultScreen" style="display:none; text-align:center; padding:3rem 2rem; flex-direction:column; gap:1.2rem; align-items:center;">
+            <div style="font-size: 3.5rem;">🏆</div>
+            <h3 style="font-family:'Caveat',cursive; font-size:2rem; color:var(--primary);">Quiz Completed!</h3>
+            <p id="arena-quizFinalScore" style="font-size:1.1rem; font-weight: 600; color:var(--text);"></p>
+            <p style="font-size: 0.88rem; color: var(--muted);">Your score has been saved to your analytics profile!</p>
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+              <button id="arena-quizRetryBtn" class="btn">Retake Quiz</button>
+              <button onclick="showQuizList()" class="btn btn-ghost">Back to List</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View 4: Interactive AI Tutor Panel -->
+    <div class="view-panel" id="panel-tutor">
+      <div class="edu-card" style="display: flex; flex-direction: column; min-height: 500px;">
+        <div class="card-head">
+          <h2>🤖 Interactive AI Tutor Workspace</h2>
+          <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.12); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; border-radius: 9999px;">
+              <span style="width: 8px; height: 8px; background: #10B981; border-radius: 50%; display: inline-block;"></span>
+              LangChain RAG: Active
+            </span>
+            <label style="font-size: 0.8rem; font-weight: 700; color: var(--muted);">Select Topic Context:</label>
+            <select class="mini-select" id="tutorTopicSelect" style="min-width: 200px;">
+              <option value="general">🌍 General Academic Assistant</option>
+            </select>
+            <select class="mini-select" id="tutorAnsLang">
+              <option value="en" selected>English</option>
+              <option value="kn">Kannada</option>
+              <option value="hi">Hindi</option>
+              <option value="ta">Tamil</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="chat-msgs" id="tutorChatBox" style="flex-grow: 1; height: 350px; background: var(--bg2); border-bottom: 1.5px solid var(--border);">
+          <div class="msg msg-ai">
+            👋 Namaste! I am your VidyaVaani AI Tutor. Select a topic context above, or ask me any general question about computer science, math, physics, chemistry, or biology!
+          </div>
+        </div>
+        
+        <div class="chat-footer">
+          <div class="chat-input-row">
+            <button class="mic-btn" id="tutorMicBtn" title="Speak your question">🎤</button>
+            <input type="text" class="chat-input" id="tutorChatInput" placeholder="Type your academic question here...">
+            <button class="btn btn-sm" id="tutorSendBtn" style="width:42px;height:42px;padding:0;border-radius:50%;">➤</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View 5: Progress & Stats Panel -->
+    <div class="view-panel" id="panel-progress">
+      <!-- Top level stats cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-icon purple">🔥</div>
+          <div class="stat-card-info">
+            <span class="stat-card-num" id="stat-streak-val">1 Day</span>
+            <span class="stat-card-lbl">Study Streak</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon teal">📚</div>
+          <div class="stat-card-info">
+            <span class="stat-card-num" id="stat-topics-val">0</span>
+            <span class="stat-card-lbl">Topics Studied</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon orange">🧠</div>
+          <div class="stat-card-info">
+            <span class="stat-card-num" id="stat-quizzes-val">0</span>
+            <span class="stat-card-lbl">Quizzes Taken</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon rose">🎯</div>
+          <div class="stat-card-info">
+            <span class="stat-card-num" id="stat-accuracy-val">0%</span>
+            <span class="stat-card-lbl">Quiz Accuracy</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; flex-wrap: wrap;">
+        <!-- Subject Domain Progress -->
+        <div class="subject-mastery-card">
+          <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--text);">📐 Subject Distribution</h2>
+          <p style="font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem;">Overview of domains you studied</p>
+          
+          <div class="mastery-row">
+            <div class="mastery-item">
+              <div class="mastery-header">
+                <span>💻 Computer Science &amp; IT</span>
+                <span id="mast-cs-val">0 topics</span>
+              </div>
+              <div class="mastery-progress-bar">
+                <div class="mastery-progress-fill" id="mast-cs-fill" style="width: 0%; background: var(--primary);"></div>
+              </div>
+            </div>
+            <div class="mastery-item">
+              <div class="mastery-header">
+                <span>📐 Mathematics</span>
+                <span id="mast-math-val">0 topics</span>
+              </div>
+              <div class="mastery-progress-bar">
+                <div class="mastery-progress-fill" id="mast-math-fill" style="width: 0%; background: var(--saffron);"></div>
+              </div>
+            </div>
+            <div class="mastery-item">
+              <div class="mastery-header">
+                <span>⚛️ Physics &amp; Chemistry</span>
+                <span id="mast-physics-val">0 topics</span>
+              </div>
+              <div class="mastery-progress-bar">
+                <div class="mastery-progress-fill" id="mast-physics-fill" style="width: 0%; background: var(--teal);"></div>
+              </div>
+            </div>
+            <div class="mastery-item">
+              <div class="mastery-header">
+                <span>🧬 Biology &amp; Medicine</span>
+                <span id="mast-biology-val">0 topics</span>
+              </div>
+              <div class="mastery-progress-bar">
+                <div class="mastery-progress-fill" id="mast-biology-fill" style="width: 0%; background: var(--rose);"></div>
+              </div>
+            </div>
+            <div class="mastery-item">
+              <div class="mastery-header">
+                <span>🌍 General / Mixed</span>
+                <span id="mast-general-val">0 topics</span>
+              </div>
+              <div class="mastery-progress-bar">
+                <div class="mastery-progress-fill" id="mast-general-fill" style="width: 0%; background: #6B7280;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges & Achievements -->
+        <div class="subject-mastery-card">
+          <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--text);">🏆 Achievements</h2>
+          <p style="font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem;">Unlocked accomplishments</p>
+          
+          <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.2rem;">
+            <!-- Badge 1 -->
+            <div class="achievement-card locked" id="badge-first-step">
+              <div class="achievement-card-icon">🚀</div>
+              <div class="achievement-card-info">
+                <h3>First Step</h3>
+                <p>Process your first lecture video.</p>
+              </div>
+              <span class="achievement-badge-status status-locked" id="badge-first-step-lbl">Locked</span>
+            </div>
+            <!-- Badge 2 -->
+            <div class="achievement-card locked" id="badge-perfect-score">
+              <div class="achievement-card-icon">💯</div>
+              <div class="achievement-card-info">
+                <h3>Perfect Score</h3>
+                <p>Answer all quiz questions correctly in any topic.</p>
+              </div>
+              <span class="achievement-badge-status status-locked" id="badge-perfect-score-lbl">Locked</span>
+            </div>
+            <!-- Badge 3 -->
+            <div class="achievement-card locked" id="badge-scholar">
+              <div class="achievement-card-icon">🎓</div>
+              <div class="achievement-card-info">
+                <h3>Dedicated Scholar</h3>
+                <p>Study 5 or more different topic videos.</p>
+              </div>
+              <span class="achievement-badge-status status-locked" id="badge-scholar-lbl">Locked</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View 6: Subjective Tests Panel -->
+    <div class="view-panel" id="panel-tests">
+      <style>
+        /* ── Subjective Tests ── */
+        .tests-setup-card { padding: 1.5rem; }
+        .tests-section-label {
+          font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+          letter-spacing: 1.5px; color: var(--muted);
+          margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;
+        }
+        .tag-chips-grid {
+          display: flex; flex-wrap: wrap; gap: 0.5rem;
+          max-height: 220px; overflow-y: auto;
+          padding: 0.5rem; border-radius: 12px;
+          background: var(--bg2); border: 1px solid var(--border);
+          margin-bottom: 1rem;
+        }
+        .tag-chip {
+          display: inline-flex; align-items: center; gap: 0.4rem;
+          padding: 0.35rem 0.85rem; border-radius: 100px;
+          border: 2px solid var(--border);
+          background: var(--card); color: var(--text);
+          font-size: 0.78rem; font-weight: 600; cursor: pointer;
+          transition: all 0.2s; user-select: none; font-family: inherit;
+        }
+        .tag-chip:hover  { border-color: var(--primary); color: var(--primary); }
+        .tag-chip.selected {
+          background: var(--primary); color: #fff;
+          border-color: var(--primary);
+          box-shadow: 0 2px 8px rgba(67,56,202,0.3);
+        }
+        .tests-controls-row {
+          display: flex; align-items: center; gap: 1rem;
+          flex-wrap: wrap; margin-top: 1rem;
+        }
+        .tests-num-select {
+          padding: 0.45rem 0.85rem; border-radius: 10px;
+          border: 1.5px solid var(--border); background: var(--card);
+          font-family: inherit; font-size: 0.85rem; color: var(--text);
+        }
+        /* Notebook test area */
+        .question-card {
+          background: #fff;
+          border: 1px solid var(--border);
+          border-radius: 14px; overflow: hidden;
+          margin-bottom: 1rem;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .question-card-header {
+          padding: 0.8rem 1.1rem;
+          background: linear-gradient(135deg, var(--primary) 0%, #6D28D9 100%);
+          display: flex; align-items: center; gap: 0.6rem;
+        }
+        .question-num-badge {
+          width: 28px; height: 28px; border-radius: 50%;
+          background: rgba(255,255,255,0.25);
+          display: flex; align-items: center; justify-content: center;
+          font-size: 0.75rem; font-weight: 800; color: #fff; flex-shrink: 0;
+        }
+        .question-topic-pill {
+          font-size: 0.65rem; font-weight: 700; letter-spacing: 1px;
+          text-transform: uppercase;
+          background: rgba(255,255,255,0.2);
+          color: #fff; padding: 0.2rem 0.6rem; border-radius: 100px;
+        }
+        .question-text {
+          padding: 0.9rem 1.1rem;
+          font-size: 0.88rem; font-weight: 600; color: var(--text);
+          line-height: 1.5;
+        }
+        .notebook-textarea {
+          width: 100%; box-sizing: border-box;
+          margin: 0; padding: 0.85rem 1.1rem;
+          border: none; border-top: 1px dashed var(--border);
+          font-family: inherit; font-size: 0.84rem; color: var(--text);
+          resize: vertical; min-height: 90px;
+          background: repeating-linear-gradient(transparent, transparent 27px, #E5E7EB 27px, #E5E7EB 28px);
+          line-height: 28px; outline: none;
+        }
+        .notebook-textarea::placeholder { color: #ADB5BD; }
+        /* Grade Cards */
+        .grade-card {
+          background: #fff; border-radius: 14px; overflow: hidden;
+          border: 1px solid var(--border); margin-bottom: 1rem;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .grade-card-header {
+          padding: 0.9rem 1.1rem; display: flex; gap: 1rem;
+          align-items: flex-start;
+          background: var(--bg2); border-bottom: 1px solid var(--border);
+        }
+        .grade-score-circle {
+          width: 54px; height: 54px; border-radius: 50%; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 1.1rem; font-weight: 900; color: #fff;
+          box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        .grade-score-circle.high { background: linear-gradient(135deg,#059669,#10B981); }
+        .grade-score-circle.mid  { background: linear-gradient(135deg,#D97706,#F59E0B); }
+        .grade-score-circle.low  { background: linear-gradient(135deg,#DC2626,#EF4444); }
+        .grade-question-q { font-size: 0.82rem; font-weight: 700; color: var(--text); }
+        .grade-question-topic { font-size: 0.7rem; color: var(--muted); margin-top: 0.1rem; }
+        .grade-body { padding: 1rem 1.1rem; }
+        .grade-section { margin-bottom: 0.7rem; }
+        .grade-section-label {
+          font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+          letter-spacing: 1px; color: var(--muted); margin-bottom: 0.3rem;
+        }
+        .grade-section-text { font-size: 0.82rem; color: var(--text); line-height: 1.5; }
+        .grade-model-answer {
+          background: #EEF2FF; border-left: 3px solid var(--primary);
+          border-radius: 0 8px 8px 0; padding: 0.6rem 0.85rem;
+          font-size: 0.8rem; color: #3730A3; line-height: 1.5; font-style: italic;
+        }
+        .tests-empty-state {
+          text-align: center; padding: 4rem 2rem; color: var(--muted);
+          font-family: 'Caveat', cursive; font-size: 1.3rem;
+        }
+        .tests-loader-msg {
+          text-align: center; padding: 2.5rem 1rem;
+          color: var(--muted); font-size: 0.9rem;
+        }
+      </style>
+
+      <!-- Step 1: Setup -->
+      <div id="tests-step-setup">
+        <div class="edu-card tests-setup-card">
+          <div class="card-head">
+            <h2>📝 Subjective Tests</h2>
+            <span style="font-family:'Caveat',cursive;color:var(--saffron);font-size:1.1rem;">Write & get AI-evaluated</span>
+          </div>
+
+          <div class="tests-section-label">🏷️ Your Studied Topics — Select to Test</div>
+          <div class="tag-chips-grid" id="testsTagsGrid">
+            <div class="tests-loader-msg">
+              <div class="spinner"></div>
+              Loading your topics...
+            </div>
+          </div>
+
+          <div class="tests-controls-row">
+            <label style="font-size:0.85rem;font-weight:600;color:var(--text);">Questions:</label>
+            <select class="tests-num-select" id="testsNumQuestions">
+              <option value="1">1 Question</option>
+              <option value="2">2 Questions</option>
+              <option value="3" selected>3 Questions</option>
+              <option value="4">4 Questions</option>
+              <option value="5">5 Questions</option>
+            </select>
+            <button class="btn btn-saffron" id="testsGenerateBtn" onclick="generateSubjectiveTest()" style="font-weight:700;">
+              ✨ Generate Test
+            </button>
+            <span id="testsSetupMsg" style="font-size:0.8rem;color:var(--rose);display:none;">
+              ⚠️ Please select at least one topic.
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Test Arena -->
+      <div id="tests-step-arena" style="display:none;">
+        <div class="edu-card" style="padding:0;">
+          <div class="card-head" style="padding:1rem 1.5rem;">
+            <div>
+              <h2>📋 Your Test</h2>
+              <p style="font-size:0.78rem;color:var(--muted);margin-top:0.2rem;">Write your answers carefully. Be detailed and conceptual.</p>
+            </div>
+            <button class="btn btn-sm" onclick="showTestsSetup()" style="margin-left:auto;">← Back</button>
+          </div>
+          <div id="testsQuestionsContainer" style="padding:1rem 1.5rem;"></div>
+          <div style="padding:0 1.5rem 1.5rem;">
+            <button class="btn btn-saffron" id="testsSubmitBtn" onclick="submitSubjectiveTest()" style="font-weight:700;width:100%;">
+              🎯 Submit Test for Evaluation
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Gradebook -->
+      <div id="tests-step-grades" style="display:none;">
+        <div class="edu-card" style="padding:0;">
+          <div class="card-head" style="padding:1rem 1.5rem;">
+            <div>
+              <h2>📊 AI Gradebook</h2>
+              <p style="font-size:0.78rem;color:var(--muted);margin-top:0.2rem;">Here's your evaluation with feedback and model answers.</p>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:0.6rem;flex-wrap:wrap;">
+              <span id="testsTotalScore" style="font-family:'Caveat',cursive;font-size:1.3rem;color:var(--primary);font-weight:700;"></span>
+              <button class="btn btn-sm btn-teal" onclick="showTestsSetup()">🔁 New Test</button>
+            </div>
+          </div>
+          <div id="testsGradesContainer" style="padding:1rem 1.5rem;"></div>
+        </div>
+      </div>
+
+      <!-- Loading overlay for generation/evaluation -->
+      <div id="tests-loading" style="display:none;">
+        <div class="edu-card" style="padding:3rem 1.5rem;text-align:center;">
+          <div class="spinner" style="margin:0 auto 1rem;"></div>
+          <div id="tests-loading-msg" style="font-size:0.9rem;color:var(--muted);">Generating questions with Mistral AI...</div>
+          <div style="font-size:0.75rem;color:var(--muted);opacity:0.7;margin-top:0.4rem;">This takes ~10–20 seconds</div>
+        </div>
+      </div>
+
+    </div><!-- end panel-tests -->
+
+<script>
+// ── DOM References ──
+const fileInput   = document.getElementById('fileInput');
+const uploadZone  = document.getElementById('uploadZone');
+const startBtn    = document.getElementById('startBtn');
+const progressCard = document.getElementById('progressCard');
+const resultCard  = document.getElementById('resultCard');
+const chatBox     = document.getElementById('chatBox');
+const chatInput   = document.getElementById('chatInput');
+const sendBtn     = document.getElementById('sendBtn');
+const micBtn      = document.getElementById('micBtn');
+const sumLang     = document.getElementById('sumLang');
+
+let currentJobId = null, originalSummary = '', hasLoadedRefs = false;
+
+// ── Auth Gate Controller ──
+function checkAuth(viewName) {
+  const publicViews = ['home'];
+  const currentUser = localStorage.getItem('vv_current_user');
+  const isLoggedIn = currentUser !== null;
+  
+  // Update sidebar locks
+  const tabs = ['upload', 'library', 'quizzes', 'tutor', 'progress', 'tests'];
+  tabs.forEach(t => {
+    const navEl = document.getElementById(`nav-${t}`);
+    if (navEl) {
+      const textEl = navEl.querySelector('.nav-text');
+      if (textEl) {
+        const origText = textEl.dataset.original || textEl.textContent;
+        textEl.dataset.original = origText;
+        if (!isLoggedIn) {
+          textEl.textContent = origText.replace(' 🔒', '') + ' 🔒';
+        } else {
+          textEl.textContent = origText.replace(' 🔒', '');
+        }
+      }
+    }
+  });
+
+  // Enforce overlay on locked workspace panels
+  if (!isLoggedIn && !publicViews.includes(viewName)) {
+    const panel = document.getElementById(`panel-${viewName}`);
+    if (panel) {
+      let overlay = panel.querySelector('.lock-overlay');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'lock-overlay';
+        overlay.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);';
+        overlay.innerHTML = `
+          <div class="edu-card" style="padding: 2.5rem; max-width: 450px; text-align: center; border-color: var(--saffron);">
+            <div style="font-size: 3.5rem; margin-bottom: 1rem;">🔒</div>
+            <h2 style="font-weight: 800; color: var(--text); font-size: 1.4rem;">Access Restricted</h2>
+            <p style="font-size: 0.9rem; color: var(--muted); margin: 0.8rem 0 1.5rem;">
+              Please sign in or register a student account on the <strong>Home Portal</strong> to access this workspace.
+            </p>
+            <button class="btn btn-saffron" onclick="switchView('home')">Go to Sign In</button>
+          </div>
+        `;
+        panel.style.position = 'relative';
+        panel.appendChild(overlay);
+      }
+      overlay.style.display = 'flex';
+    }
+  } else {
+    // Hide lock overlay if it exists
+    const panel = document.getElementById(`panel-${viewName}`);
+    if (panel) {
+      const overlay = panel.querySelector('.lock-overlay');
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
+    }
+  }
+}
+
+// ── Dummy Auth Handlers ──
+function toggleAuthTab(tab) {
+  const signinBtn = document.getElementById('authTabSignIn');
+  const registerBtn = document.getElementById('authTabRegister');
+  const signinForm = document.getElementById('authFormSignIn');
+  const registerForm = document.getElementById('authFormRegister');
+  
+  if (tab === 'signin') {
+    signinBtn.classList.add('active');
+    registerBtn.classList.remove('active');
+    signinForm.style.display = 'flex';
+    registerForm.style.display = 'none';
+  } else {
+    signinBtn.classList.remove('active');
+    registerBtn.classList.add('active');
+    signinForm.style.display = 'none';
+    registerForm.style.display = 'flex';
+  }
+}
+
+function handleDummySignIn() {
+  const user = document.getElementById('signinUser').value.trim();
+  const pass = document.getElementById('signinPass').value.trim();
+  
+  if (!user || !pass) {
+    alert("Please fill in username and password.");
+    return;
+  }
+  
+  localStorage.setItem('vv_current_user', user);
+  const streak = parseInt(localStorage.getItem('vv_streak') || '0') || 1;
+  localStorage.setItem('vv_streak', streak);
+  
+  updateAuthUI();
+  alert(`👋 Welcome back, ${user}! Educational portal unlocked.`);
+  switchView('home');
+}
+
+function handleDummyRegister() {
+  const user = document.getElementById('registerUser').value.trim();
+  const pass = document.getElementById('registerPass').value.trim();
+  const conf = document.getElementById('registerConfirmPass').value.trim();
+  
+  if (!user || !pass || !conf) {
+    alert("Please fill in all registration fields.");
+    return;
+  }
+  
+  if (pass !== conf) {
+    alert("Passwords do not match.");
+    return;
+  }
+  
+  localStorage.setItem('vv_current_user', user);
+  localStorage.setItem('vv_streak', '1');
+  
+  updateAuthUI();
+  alert(`🎉 Account created successfully! Welcome, ${user}.`);
+  switchView('home');
+}
+
+function handleDummySignOut() {
+  localStorage.removeItem('vv_current_user');
+  updateAuthUI();
+  alert("🚪 Signed out successfully.");
+  switchView('home');
+}
+
+function updateAuthUI() {
+  const currentUser = localStorage.getItem('vv_current_user');
+  const signinForm = document.getElementById('authFormSignIn');
+  const registerForm = document.getElementById('authFormRegister');
+  const dashboard = document.getElementById('authProfileDashboard');
+  const tabsBar = document.querySelector('.auth-tab-bar');
+  
+  if (currentUser) {
+    signinForm.style.display = 'none';
+    registerForm.style.display = 'none';
+    tabsBar.style.display = 'none';
+    dashboard.style.display = 'flex';
+    
+    document.getElementById('profileWelcomeUser').textContent = `Welcome, ${currentUser}! 🎓`;
+    document.getElementById('profileUsernameVal').textContent = currentUser;
+    const streak = localStorage.getItem('vv_streak') || '1';
+    document.getElementById('profileStreakVal').textContent = `🔥 ${streak} Day${streak !== '1' ? 's' : ''}`;
+  } else {
+    tabsBar.style.display = 'flex';
+    toggleAuthTab('signin');
+    dashboard.style.display = 'none';
+    document.getElementById('signinUser').value = '';
+    document.getElementById('signinPass').value = '';
+    document.getElementById('registerUser').value = '';
+    document.getElementById('registerPass').value = '';
+    document.getElementById('registerConfirmPass').value = '';
+  }
+  
+  const activeNav = document.querySelector('.app-sidebar-item.active');
+  if (activeNav) {
+    const viewName = activeNav.id.replace('nav-', '');
+    checkAuth(viewName);
+  }
+}
+
+// ── SPA View Controller ──
+function switchView(viewName) {
+  const navs = ['home', 'upload', 'library', 'quizzes', 'tutor', 'progress', 'tests'];
+  navs.forEach(v => {
+    const navEl = document.getElementById(`nav-${v}`);
+    const panelEl = document.getElementById(`panel-${v}`);
+    if (navEl) navEl.classList.toggle('active', v === viewName);
+    if (panelEl) panelEl.classList.toggle('active', v === viewName);
+  });
+  
+  const viewTitles = {
+    home:     { title: "🎓 VidyaVaani", tag: "Welcome to VidyaVaani — Multilingual Educational Hub" },
+    upload:   { title: "🎥 Upload & Configure", tag: "Choose your educational video and target translation language" },
+    library:  { title: "📚 My Study Library", tag: "Browse recently studied lectures, view notes, and ask questions" },
+    quizzes:  { title: "🧠 Quiz Center", tag: "Test your retention and review explanations" },
+    tutor:    { title: "🤖 Interactive AI Tutor Workspace", tag: "Chat with your AI teacher in any local language" },
+    progress: { title: "📊 Progress & Stats", tag: "Track your study history, quiz accuracy, and domain mastery" },
+    tests:    { title: "📝 Subjective Tests", tag: "Select topics, write answers, and get AI-powered evaluation & feedback" }
+  };
+  
+  const titleInfo = viewTitles[viewName] || viewTitles['home'];
+  document.getElementById('view-title').textContent = titleInfo.title;
+  document.getElementById('view-tagline').textContent = titleInfo.tag;
+  
+  checkAuth(viewName);
+  
+  if (viewName === 'library') {
+    showLibraryGrid();
+    loadHistory();
+  } else if (viewName === 'quizzes') {
+    showQuizList();
+  } else if (viewName === 'tutor') {
+    loadTutorContexts();
+  } else if (viewName === 'progress') {
+    updateStatsDashboard();
+  } else if (viewName === 'tests') {
+    loadTestTags();
+  }
+}
+
+// ── Streak Tracking ──
+function updateStreak() {
+  const lastVisit = localStorage.getItem('vv_last_visit');
+  let streak = parseInt(localStorage.getItem('vv_streak') || '0');
+  const today = new Date().toDateString();
+  
+  if (!lastVisit) {
+    streak = 1;
+  } else {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    if (lastVisit === yesterday.toDateString()) {
+      streak += 1;
+    } else if (lastVisit !== today) {
+      streak = 1;
+    }
+  }
+  localStorage.setItem('vv_streak', streak);
+  localStorage.setItem('vv_last_visit', today);
+  
+  const streakEl = document.getElementById('header-streak-val');
+  if (streakEl) streakEl.textContent = `${streak} Day${streak !== 1 ? 's' : ''}`;
+  return streak;
+}
+
+// ── Upload Zone ──
+uploadZone.onclick = () => fileInput.click();
+fileInput.onchange = () => {
+  if (fileInput.files[0]) {
+    document.getElementById('fileLabel').textContent = '✅ ' + fileInput.files[0].name;
+    startBtn.disabled = false;
+  }
+};
+
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.style.borderColor = 'var(--primary)'; });
+uploadZone.addEventListener('dragleave', () => uploadZone.style.borderColor = '#C4B5A0');
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.style.borderColor = '#C4B5A0';
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('video/')) {
+    fileInput.files = e.dataTransfer.files;
+    document.getElementById('fileLabel').textContent = '✅ ' + file.name;
+    startBtn.disabled = false;
+  }
+});
+
+// ── Start Translation ──
+startBtn.onclick = async () => {
+  const fd = new FormData();
+  fd.append('video', fileInput.files[0]);
+  fd.append('target_lang', document.getElementById('tgtLang').value);
+  fd.append('domain', document.getElementById('domainGlossary').value);
+  fd.append('voice_gender', document.getElementById('voiceGender').value);
+
+  progressCard.style.display = 'block';
+  startBtn.disabled = true;
+
+  try {
+    const res  = await fetch('/upload', { method: 'POST', body: fd });
+    const data = await res.json();
+    if (data.error) { alert(data.error); location.reload(); return; }
+    currentJobId = data.job_id;
+    poll(data.job_id);
+  } catch (err) {
+    alert('Upload failed. Please try again.');
+    location.reload();
+  }
+};
+
+// ── Polling ──
+function poll(id) {
+  const t = setInterval(async () => {
+    const r = await fetch('/status/' + id);
+    const d = await r.json();
+    updateProgress(d.progress || 0, d.status, d.log || '');
+    if (d.status === 'done')  { clearInterval(t); showResult(d); }
+    if (d.status === 'error') { clearInterval(t); alert(d.error); location.reload(); }
+  }, 1500);
+}
+
+function updateProgress(pct, status, log) {
+  const offset = 314 - (pct / 100) * 314;
+  document.getElementById('ringFill').style.strokeDashoffset = offset;
+  document.getElementById('ringPct').textContent  = pct + '%';
+  document.getElementById('progLabel').textContent = status.toUpperCase();
+  document.getElementById('progLog').textContent   = log;
+}
+
+function showResult(d) {
+  alert(`🎉 Success! Video "${d.title}" is translated and ready.`);
+  fileInput.value = '';
+  document.getElementById('fileLabel').textContent = 'Drop your video here or click to browse';
+  startBtn.disabled = true;
+  progressCard.style.display = 'none';
+  switchView('library');
+  loadHistoryItem(d.job_id);
+}
+
+function showResultDetails(d) {
+  currentJobId = d.job_id;
+  quizQuestions = [];
+  currentQuestionIndex = 0;
+  selectedOptionIndex = null;
+  currentScore = 0;
+  isGeneratingQuiz = false;
+  document.getElementById('study-topic-title').textContent = `🎬 Study Topic: ${d.title}`;
+  document.getElementById('translatedVideo').src  = d.video_url + '?t=' + Date.now();
+  document.getElementById('downloadLink').href = d.video_url;
+  document.getElementById('srcText').textContent = d.english;
+  document.getElementById('tgtText').textContent = d.kannada;
+  originalSummary = d.summary;
+  renderSummary(d.summary);
+
+  document.getElementById('notesEmpty').style.display = 'flex';
+  document.getElementById('notesContent').style.display = 'none';
+  if (document.getElementById('quizBox')) {
+    document.getElementById('quizBox').innerHTML = '';
+  }
+  document.getElementById('quizLoader').style.display = 'none';
+  document.getElementById('quizContainer').style.display = 'none';
+  document.getElementById('quizResultScreen').style.display = 'none';
+  chatBox.innerHTML = `<div class="msg msg-ai">👋 Namaste! I've analyzed the video. Ask me anything — in any language!</div>`;
+
+  // Load textbooks automatically
+  loadReferences(d.job_id);
+
+  // Auto-switch to Summary tab
+  setActiveTab(tabSummaryBtn, tabSummaryContent);
+  tabSummaryContent.style.display = 'block';
+}
+
+// ── Load Study Library Grid ──
+async function loadHistory() {
+  try {
+    const res = await fetch('/history_list');
+    const items = await res.json();
+    const container = document.getElementById('libraryGrid');
+    const emptyState = document.getElementById('libraryEmptyState');
+    
+    if (items.length === 0) {
+      container.innerHTML = '';
+      emptyState.style.display = 'block';
+      return;
+    }
+    emptyState.style.display = 'none';
+    
+    const langMap = { kn: 'Kannada', hi: 'Hindi', ta: 'Tamil', te: 'Telugu', ml: 'Malayalam', en: 'English' };
+    const domainMap = { general: 'General', cs: 'CS & IT', physics_chem: 'Physics/Chem', math: 'Mathematics', biology: 'Biology' };
+    const domainIcons = { general: '🌍', cs: '💻', physics_chem: '⚛️', math: '📐', biology: '🧬' };
+    
+    container.innerHTML = items.map(item => {
+      const langName = langMap[item.target_lang] || item.target_lang;
+      const domainName = domainMap[item.domain] || item.domain;
+      const icon = domainIcons[item.domain] || '📚';
+      
+      return `
+        <div class="history-item" onclick="loadHistoryItem('${item.job_id}')" style="min-height: 120px;">
+          <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">${icon}</div>
+          <div class="history-item-title">${item.title}</div>
+          <div class="history-item-meta" style="margin-top: auto;">
+            <span class="history-badge badge-${item.domain}">${domainName}</span>
+            <span class="history-badge badge-lang">${langName}</span>
+            <span>📅 ${item.timestamp || 'Recent'}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error("Error loading library history:", err);
+  }
+}
+
+async function loadHistoryItem(id) {
+  try {
+    const res = await fetch('/status/' + id);
+    const d = await res.json();
+    if (d.error) { alert("Could not load study topic: " + d.error); return; }
+    document.getElementById('library-list-mode').style.display = 'none';
+    document.getElementById('library-detail-mode').style.display = 'block';
+    showResultDetails(d);
+  } catch (err) {
+    alert("Error loading topic details.");
+  }
+}
+
+function showLibraryGrid() {
+  document.getElementById('library-list-mode').style.display = 'block';
+  document.getElementById('library-detail-mode').style.display = 'none';
+}
+
+function renderSummary(txt) {
+  const html = txt.split('\n').filter(l => l.trim())
+    .map(l => `<li>${l.replace(/^[-*•]\s*/, '')}</li>`).join('');
+  document.getElementById('summaryText').innerHTML = `<ul>${html}</ul>`;
+}
+
+// ── Summary Translation ──
+sumLang.onchange = async () => {
+  if (!originalSummary) return;
+  document.getElementById('summaryText').textContent = 'Translating...';
+  const res  = await fetch('/translate_text', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ text: originalSummary, target_lang: sumLang.value })
+  });
+  const data = await res.json();
+  renderSummary(data.translated);
+};
+
+// ── Voice Recognition ──
+const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (Recognition) {
+  const recognizer = new Recognition();
+  recognizer.continuous = false; recognizer.interimResults = false;
+  micBtn.onclick = () => { recognizer.lang='en-US'; recognizer.start(); micBtn.classList.add('active'); };
+  recognizer.onresult = e => { chatInput.value = e.results[0][0].transcript; micBtn.classList.remove('active'); askQuestion(); };
+  recognizer.onerror = recognizer.onend = () => micBtn.classList.remove('active');
+} else { micBtn.style.display = 'none'; }
+
+// ── Study Details Chat ──
+async function askQuestion() {
+  const q = chatInput.value.trim();
+  if (!q || !currentJobId) return;
+  appendMsg(q, 'user'); chatInput.value = '';
+  
+  const loadingMsg = document.createElement('div');
+  loadingMsg.className = 'msg msg-ai';
+  loadingMsg.textContent = '⏳ Thinking...';
+  chatBox.appendChild(loadingMsg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  try {
+    const res  = await fetch('/chat', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ job_id: currentJobId, question: q, ans_lang: document.getElementById('chatAnsLang').value })
+    });
+    const data = await res.json();
+    chatBox.removeChild(loadingMsg);
+    appendMsg(data.answer || data.error || 'Error getting answer', 'ai', data.sources);
+  } catch (err) {
+    chatBox.removeChild(loadingMsg);
+    appendMsg('Error getting answer', 'ai');
+  }
+}
+function appendMsg(t, r, sources) {
+  const d = document.createElement('div');
+  d.className = `msg msg-${r}`; d.textContent = t;
+  if (sources && sources.length > 0) {
+    const srcBox = document.createElement('div');
+    srcBox.style.cssText = 'margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--border); font-size: 0.75rem; color: var(--muted);';
+    srcBox.innerHTML = '<strong style="color: var(--primary);">📚 RAG Citations:</strong> ' + 
+      sources.map(s => `<span style="display:inline-block; background: var(--bg2); padding: 2px 6px; border-radius: 4px; margin: 2px; border: 1px solid var(--border);" title="${s.chunk}">${s.lecture}</span>`).join(' ');
+    d.appendChild(srcBox);
+  }
+  chatBox.appendChild(d); chatBox.scrollTop = chatBox.scrollHeight;
+}
+sendBtn.onclick = askQuestion;
+chatInput.onkeypress = e => { if (e.key === 'Enter') askQuestion(); };
+
+// ── Library Tab switcher ──
+const tabSummaryBtn     = document.getElementById('tabSummaryBtn');
+const tabQuizBtn        = document.getElementById('tabQuizBtn');
+const tabNotesBtn       = document.getElementById('tabNotesBtn');
+const tabSummaryContent = document.getElementById('tabSummaryContent');
+const tabQuizContent    = document.getElementById('tabQuizContent');
+const tabNotesContent   = document.getElementById('tabNotesContent');
+
+function setActiveTab(btn, content) {
+  [tabSummaryBtn, tabQuizBtn, tabNotesBtn].forEach(b => {
+    if (b) b.classList.remove('active');
+  });
+  [tabSummaryContent, tabQuizContent, tabNotesContent].forEach(c => {
+    if (c) c.style.display = 'none';
+  });
+  if (btn) btn.classList.add('active');
+  if (content) {
+    content.style.display = 'flex';
+    content.style.flexDirection = 'column';
+  }
+}
+
+tabSummaryBtn.onclick = () => {
+  setActiveTab(tabSummaryBtn, tabSummaryContent);
+  tabSummaryContent.style.display = 'block';
+};
+tabQuizBtn.onclick = () => {
+  setActiveTab(tabQuizBtn, tabQuizContent);
+  if (currentJobId && quizQuestions.length === 0 && !isGeneratingQuiz) loadQuiz(currentJobId);
+};
+tabNotesBtn.onclick = () => setActiveTab(tabNotesBtn, tabNotesContent);
+
+// ── Study Details Inline Quiz ──
+let quizQuestions = [], currentQuestionIndex = 0, selectedOptionIndex = null,
+    currentScore = 0, isGeneratingQuiz = false;
+
+async function loadQuiz(jobId) {
+  isGeneratingQuiz = true;
+  const loader = document.getElementById('quizLoader');
+  loader.style.display = 'block';
+  loader.innerHTML = `<div class="spinner"></div><div style="font-size:0.9rem;color:var(--muted);">Generating quiz from video transcript...</div>`;
+  document.getElementById('quizContainer').style.display = 'none';
+  document.getElementById('quizResultScreen').style.display = 'none';
+  try {
+    const res  = await fetch('/generate_quiz', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ job_id: jobId })
+    });
+    const data = await res.json();
+    quizQuestions = data.quiz || [];
+    if (quizQuestions.length > 0) {
+      loader.style.display = 'none';
+      document.getElementById('quizContainer').style.display = 'flex';
+      currentQuestionIndex = 0; currentScore = 0;
+      document.getElementById('quizScoreText').textContent = 'Score: 0';
+      showQuestion(0);
+    } else {
+      loader.innerHTML = '<div style="color:var(--rose);font-size:0.85rem;padding:1rem;">No quiz generated. Make sure video has spoken English content.</div>';
+    }
+  } catch { loader.innerHTML = '<div style="color:var(--rose);font-size:0.85rem;">Failed to generate quiz.</div>'; }
+  finally { isGeneratingQuiz = false; }
+}
+
+function showQuestion(idx) {
+  const q = quizQuestions[idx]; selectedOptionIndex = null;
+  document.getElementById('quizProgress').textContent = `Question ${idx+1} of ${quizQuestions.length}`;
+  document.getElementById('quizScoreText').textContent = `Score: ${currentScore}`;
+  document.getElementById('quizQuestion').textContent = q.question;
+  const choices = document.getElementById('quizChoices'); choices.innerHTML = '';
+  q.options.forEach((opt, oIdx) => {
+    const item = document.createElement('div');
+    item.className = 'quiz-choice'; item.id = `cc-${oIdx}`;
+    item.onclick = () => selectChoice(oIdx);
+    const inp = document.createElement('input');
+    inp.type = 'radio'; inp.name = 'qopt'; inp.id = `c-${oIdx}`; inp.value = oIdx;
+    const lbl = document.createElement('label');
+    lbl.htmlFor = `c-${oIdx}`; lbl.textContent = opt;
+    lbl.style.cssText = 'cursor:pointer;flex:1;';
+    item.appendChild(inp); item.appendChild(lbl); choices.appendChild(item);
+  });
+  document.getElementById('quizFeedback').style.display = 'none';
+  document.getElementById('quizSubmitBtn').style.display = 'block';
+  document.getElementById('quizSubmitBtn').disabled = true;
+  document.getElementById('quizNextBtn').style.display = 'none';
+}
+
+function selectChoice(oIdx) {
+  if (document.getElementById('quizSubmitBtn').style.display === 'none') return;
+  selectedOptionIndex = oIdx;
+  document.getElementById('quizSubmitBtn').disabled = false;
+  for (let i = 0; i < 4; i++) {
+    const c = document.getElementById(`cc-${i}`);
+    if (!c) continue;
+    c.classList.toggle('selected', i === oIdx);
+    document.getElementById(`c-${i}`).checked = (i === oIdx);
+  }
+}
+
+document.getElementById('quizSubmitBtn').onclick = () => {
+  if (selectedOptionIndex === null) return;
+  const q = quizQuestions[currentQuestionIndex];
+  const ok = selectedOptionIndex === q.answer_index;
+  if (ok) {
+    currentScore++;
+    document.getElementById('quizScoreText').textContent = `Score: ${currentScore}`;
+    document.getElementById('quizStatusBadge').textContent = '✅ Correct!';
+    const fb = document.getElementById('quizFeedback');
+    fb.style.background = 'var(--teal-l)'; fb.style.border = '1.5px solid #99F6E4'; fb.style.color = '#134E4A';
+    document.getElementById(`cc-${selectedOptionIndex}`).classList.add('correct');
+  } else {
+    document.getElementById('quizStatusBadge').textContent = '❌ Incorrect';
+    const fb = document.getElementById('quizFeedback');
+    fb.style.background = 'var(--rose-l)'; fb.style.border = '1.5px solid #FECDD3'; fb.style.color = '#881337';
+    document.getElementById(`cc-${selectedOptionIndex}`).classList.add('incorrect');
+    document.getElementById(`cc-${q.answer_index}`).classList.add('correct');
+  }
+  document.getElementById('quizExplanation').textContent = q.explanation || '';
+  document.getElementById('quizFeedback').style.display = 'block';
+  document.getElementById('quizSubmitBtn').style.display = 'none';
+  document.getElementById('quizNextBtn').style.display = 'block';
+};
+
+document.getElementById('quizNextBtn').onclick = () => {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < quizQuestions.length) {
+    showQuestion(currentQuestionIndex);
+  } else {
+    document.getElementById('quizContainer').style.display = 'none';
+    const rs = document.getElementById('quizResultScreen');
+    rs.style.display = 'flex'; rs.style.flexDirection = 'column';
+    document.getElementById('quizFinalScore').textContent =
+      `You scored ${currentScore} out of ${quizQuestions.length} — ${Math.round(currentScore/quizQuestions.length*100)}%`;
+  }
+};
+
+document.getElementById('quizRetryBtn').onclick = () => {
+  if (currentJobId) { quizQuestions = []; loadQuiz(currentJobId); }
+};
+
+// ── References & Reading Materials (Textbooks only) ──
+async function loadReferences(jobId) {
+  const booksContainer = document.getElementById('refsBooksContainer');
+  if (!booksContainer) return;
+  booksContainer.innerHTML = `<div style="font-size:0.8rem; color:var(--muted); text-align:center; padding:1.2rem;">⏳ Loading textbooks...</div>`;
+  
+  try {
+    const res = await fetch('/references/' + jobId);
+    const data = await res.json();
+    
+    if (data.error) {
+      booksContainer.innerHTML = `<div style="padding:1rem; font-size:0.8rem; color:var(--muted); text-align:center;">⚠️ Error loading textbooks.</div>`;
+      return;
+    }
+    
+    renderReferences(data);
+  } catch (err) {
+    console.error("Error fetching references:", err);
+    booksContainer.innerHTML = `<div style="padding:1rem; font-size:0.8rem; color:var(--muted); text-align:center;">⚠️ Failed to load textbooks.</div>`;
+  }
+}
+
+function renderReferences(data) {
+  const booksContainer = document.getElementById('refsBooksContainer');
+  if (!booksContainer) return;
+  
+  // Render textbooks
+  if (data.books && data.books.length > 0) {
+    booksContainer.innerHTML = data.books.map(b => `
+      <div class="book-card">
+        <div class="book-icon">${b.icon || '📚'}</div>
+        <div class="book-info">
+          <h4>${b.title}</h4>
+          <p>${b.authors}</p>
+          <div class="book-meta">
+            <span class="book-tag">${b.edition || '1st Edition'}</span>
+            <span class="book-tag pub">${b.publisher || 'Unknown'}</span>
+          </div>
+        </div>
+        <button class="book-search-btn" onclick="window.open('https://www.google.com/search?q=${encodeURIComponent(b.search || b.title)}','_blank')">Search →</button>
+      </div>
+    `).join('');
+  } else {
+    booksContainer.innerHTML = `<div style="padding:1rem; font-size:0.8rem; color:var(--muted); text-align:center;">No textbook recommendations available.</div>`;
+  }
+}
+
+// ── Active Quiz Arena (Standalone Quiz Tab) ──
+let arenaQuizQuestions = [], arenaCurrentQuestionIndex = 0, arenaSelectedOptionIndex = null,
+    arenaCurrentScore = 0, arenaJobId = '', arenaJobTitle = '';
+
+async function loadQuizTopics() {
+  try {
+    const res = await fetch('/history_list');
+    const items = await res.json();
+    const container = document.getElementById('quizTopicsGrid');
+    const emptyState = document.getElementById('quizEmptyState');
+    
+    if (items.length === 0) {
+      container.innerHTML = '';
+      emptyState.style.display = 'block';
+      return;
+    }
+    emptyState.style.display = 'none';
+    
+    const domainMap = { general: 'General', cs: 'CS & IT', physics_chem: 'Physics/Chem', math: 'Mathematics', biology: 'Biology' };
+    const domainIcons = { general: '🌍', cs: '💻', physics_chem: '⚛️', math: '📐', biology: '🧬' };
+    
+    const attempts = JSON.parse(localStorage.getItem('vv_quiz_attempts') || '[]');
+    
+    container.innerHTML = items.map(item => {
+      const domainName = domainMap[item.domain] || item.domain;
+      const icon = domainIcons[item.domain] || '📚';
+      
+      const topicAttempts = attempts.filter(a => a.job_id === item.job_id);
+      let scoreText = 'Not attempted';
+      let scoreColor = 'var(--muted)';
+      if (topicAttempts.length > 0) {
+        const highest = Math.max(...topicAttempts.map(a => a.score));
+        const total = topicAttempts[0].total;
+        scoreText = `Best Score: ${highest}/${total}`;
+        scoreColor = highest === total ? 'var(--success)' : 'var(--primary)';
+      }
+      
+      return `
+        <div class="history-item" onclick="startArenaQuiz('${item.job_id}', '${item.title.replace(/'/g, "\\'")}')" style="min-height: 140px;">
+          <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">${icon}</div>
+          <div class="history-item-title">${item.title}</div>
+          <div class="history-item-meta" style="margin-top: auto; display:flex; justify-content:space-between; width:100%; align-items:center;">
+            <span class="history-badge badge-${item.domain}">${domainName}</span>
+            <span style="font-weight: 700; color: ${scoreColor}; font-size: 0.72rem;">${scoreText}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error("Error loading quiz topics:", err);
+  }
+}
+
+async function startArenaQuiz(jobId, title) {
+  arenaJobId = jobId;
+  arenaJobTitle = title;
+  document.getElementById('quiz-list-mode').style.display = 'none';
+  document.getElementById('quiz-arena-mode').style.display = 'block';
+  
+  document.getElementById('arena-quiz-title').textContent = `🧠 Subject Quiz: ${title}`;
+  
+  const container = document.getElementById('arena-quizChoices');
+  container.innerHTML = '';
+  document.getElementById('arena-quizQuestion').textContent = 'Generating quiz questions from lecture...';
+  document.getElementById('arena-quizProgress').textContent = 'Please wait...';
+  document.getElementById('arena-quizFeedback').style.display = 'none';
+  document.getElementById('arena-quizSubmitBtn').style.display = 'block';
+  document.getElementById('arena-quizSubmitBtn').disabled = true;
+  document.getElementById('arena-quizNextBtn').style.display = 'none';
+  document.getElementById('arena-quizResultScreen').style.display = 'none';
+  
+  try {
+    const res  = await fetch('/generate_quiz', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ job_id: jobId })
+    });
+    const data = await res.json();
+    arenaQuizQuestions = data.quiz || [];
+    if (arenaQuizQuestions.length > 0) {
+      arenaCurrentQuestionIndex = 0; arenaCurrentScore = 0;
+      document.getElementById('arena-quizScoreText').textContent = 'Score: 0';
+      showArenaQuestion(0);
+    } else {
+      document.getElementById('arena-quizQuestion').textContent = 'Failed to generate a quiz. Make sure the video contains English lectures.';
+    }
+  } catch {
+    document.getElementById('arena-quizQuestion').textContent = 'Error loading quiz. Please ensure the server and AI models are running.';
+  }
+}
+
+function showArenaQuestion(idx) {
+  const q = arenaQuizQuestions[idx]; arenaSelectedOptionIndex = null;
+  document.getElementById('arena-quizProgress').textContent = `Question ${idx+1} of ${arenaQuizQuestions.length}`;
+  document.getElementById('arena-quizScoreText').textContent = `Score: ${arenaCurrentScore}`;
+  document.getElementById('arena-quizQuestion').textContent = q.question;
+  const choices = document.getElementById('arena-quizChoices'); choices.innerHTML = '';
+  q.options.forEach((opt, oIdx) => {
+    const item = document.createElement('div');
+    item.className = 'quiz-choice'; item.id = `aqcc-${oIdx}`;
+    item.onclick = () => selectArenaChoice(oIdx);
+    const inp = document.createElement('input');
+    inp.type = 'radio'; inp.name = 'aqopt'; inp.id = `aqc-${oIdx}`; inp.value = oIdx;
+    const lbl = document.createElement('label');
+    lbl.htmlFor = `aqc-${oIdx}`; lbl.textContent = opt;
+    lbl.style.cssText = 'cursor:pointer;flex:1;';
+    item.appendChild(inp); item.appendChild(lbl); choices.appendChild(item);
+  });
+  document.getElementById('arena-quizFeedback').style.display = 'none';
+  document.getElementById('arena-quizSubmitBtn').style.display = 'block';
+  document.getElementById('arena-quizSubmitBtn').disabled = true;
+  document.getElementById('arena-quizNextBtn').style.display = 'none';
+}
+
+function selectArenaChoice(oIdx) {
+  if (document.getElementById('arena-quizSubmitBtn').style.display === 'none') return;
+  arenaSelectedOptionIndex = oIdx;
+  document.getElementById('arena-quizSubmitBtn').disabled = false;
+  for (let i = 0; i < 4; i++) {
+    const c = document.getElementById(`aqcc-${i}`);
+    if (!c) continue;
+    c.classList.toggle('selected', i === oIdx);
+    document.getElementById(`aqc-${i}`).checked = (i === oIdx);
+  }
+}
+
+document.getElementById('arena-quizSubmitBtn').onclick = () => {
+  if (arenaSelectedOptionIndex === null) return;
+  const q = arenaQuizQuestions[arenaCurrentQuestionIndex];
+  const ok = arenaSelectedOptionIndex === q.answer_index;
+  if (ok) {
+    arenaCurrentScore++;
+    document.getElementById('arena-quizScoreText').textContent = `Score: ${arenaCurrentScore}`;
+    document.getElementById('arena-quizStatusBadge').textContent = '✅ Correct!';
+    const fb = document.getElementById('arena-quizFeedback');
+    fb.style.background = 'var(--teal-l)'; fb.style.border = '1.5px solid #99F6E4'; fb.style.color = '#134E4A';
+    document.getElementById(`aqcc-${arenaSelectedOptionIndex}`).classList.add('correct');
+  } else {
+    document.getElementById('arena-quizStatusBadge').textContent = '❌ Incorrect';
+    const fb = document.getElementById('arena-quizFeedback');
+    fb.style.background = 'var(--rose-l)'; fb.style.border = '1.5px solid #FECDD3'; fb.style.color = '#881337';
+    document.getElementById(`aqcc-${arenaSelectedOptionIndex}`).classList.add('incorrect');
+    document.getElementById(`aqcc-${q.answer_index}`).classList.add('correct');
+  }
+  document.getElementById('arena-quizExplanation').textContent = q.explanation || '';
+  document.getElementById('arena-quizFeedback').style.display = 'block';
+  document.getElementById('arena-quizSubmitBtn').style.display = 'none';
+  document.getElementById('arena-quizNextBtn').style.display = 'block';
+};
+
+document.getElementById('arena-quizNextBtn').onclick = () => {
+  arenaCurrentQuestionIndex++;
+  if (arenaCurrentQuestionIndex < arenaQuizQuestions.length) {
+    showArenaQuestion(arenaCurrentQuestionIndex);
+  } else {
+    saveQuizScore(arenaJobId, arenaJobTitle, arenaCurrentScore, arenaQuizQuestions.length);
+    
+    document.getElementById('arena-quizQuestion').textContent = '';
+    document.getElementById('arena-quizChoices').innerHTML = '';
+    document.getElementById('arena-quizFeedback').style.display = 'none';
+    document.getElementById('arena-quizSubmitBtn').style.display = 'none';
+    document.getElementById('arena-quizNextBtn').style.display = 'none';
+    
+    const rs = document.getElementById('arena-quizResultScreen');
+    rs.style.display = 'flex';
+    document.getElementById('arena-quizFinalScore').textContent =
+      `You scored ${arenaCurrentScore} out of ${arenaQuizQuestions.length} — ${Math.round(arenaCurrentScore/arenaQuizQuestions.length*100)}%`;
+  }
+};
+
+document.getElementById('arena-quizRetryBtn').onclick = () => {
+  startArenaQuiz(arenaJobId, arenaJobTitle);
+};
+
+function saveQuizScore(jobId, topicTitle, score, total) {
+  let attempts = JSON.parse(localStorage.getItem('vv_quiz_attempts') || '[]');
+  attempts.push({
+    job_id: jobId,
+    title: topicTitle,
+    score: score,
+    total: total,
+    timestamp: Date.now()
+  });
+  localStorage.setItem('vv_quiz_attempts', JSON.stringify(attempts));
+}
+
+function showQuizList() {
+  document.getElementById('quiz-list-mode').style.display = 'block';
+  document.getElementById('quiz-arena-mode').style.display = 'none';
+  loadQuizTopics();
+}
+
+// ── Smart Notes ──
+let currentNotesData = null;
+document.getElementById('generateNotesBtn').onclick = async () => {
+  if (!currentJobId) { alert('Process a video first.'); return; }
+  const lang = document.getElementById('notesLang').value;
+  const btn  = document.getElementById('generateNotesBtn');
+  btn.disabled = true;
+  document.getElementById('notesLoader').style.display = 'block';
+  document.getElementById('notesEmpty').style.display  = 'none';
+  document.getElementById('notesContent').style.display = 'none';
+  try {
+    const res  = await fetch('/generate_notes', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ job_id: currentJobId, language: lang })
+    });
+    const data = await res.json();
+    if (data.error) { alert('Notes error: ' + data.error); document.getElementById('notesEmpty').style.display='block'; return; }
+    currentNotesData = data;
+    renderNotes(data);
+  } catch { alert('Failed. Check Ollama is running.'); document.getElementById('notesEmpty').style.display='block'; }
+  finally { document.getElementById('notesLoader').style.display='none'; btn.disabled=false; }
+};
+
+function renderNotes(data) {
+  const names = { en:'English', hi:'Hindi (हिन्दी)', kn:'Kannada (ಕನ್ನಡ)', ta:'Tamil (தமிழ்)', te:'Telugu (తెలుగు)', ml:'Malayalam (മലയാളм)' };
+  document.getElementById('notesLangLabel').textContent = `📝 Notes · ${names[data.language] || data.language}`;
+  document.getElementById('notesBody').innerHTML = markdownToHtml(data.notes);
+  const nc = document.getElementById('notesContent');
+  nc.style.display = 'flex'; nc.style.flexDirection = 'column';
+}
+
+function markdownToHtml(text) {
+  const colors = { topic:'#4338CA', concept:'#0D9488', detail:'#059669', note:'#059669', takeaway:'#D97706', key:'#D97706', review:'#E11D48', question:'#E11D48' };
+  function headColor(t) {
+    for (const [k,v] of Object.entries(colors)) if (t.includes(k)) return v;
+    return '#4338CA';
+  }
+  return text.split('\n').map(line => {
+    const s = line.trim();
+    if (!s) return '<div style="height:5px;"></div>';
+    if (s.startsWith('##') || s.startsWith('#')) {
+      const h = s.replace(/^#+\s*/, '');
+      const c = headColor(h.toLowerCase());
+      return `<div style="margin:10px 0 5px;padding:5px 10px;background:${c}15;border-left:3px solid ${c};border-radius:0 8px 8px 0;font-weight:700;font-size:0.82rem;color:${c};text-transform:uppercase;letter-spacing:0.5px;">${h}</div>`;
+    }
+    if (s.startsWith('- ') || s.startsWith('• ') || s.startsWith('* ')) {
+      const c = s.slice(2);
+      return `<div style="display:flex;gap:7px;align-items:flex-start;padding:2px 0;"><span style="color:var(--saffron);flex-shrink:0;margin-top:3px;font-size:0.7rem;">◆</span><span style="color:#4B4530;">${c}</span></div>`;
+    }
+    if (/^\d+\./.test(s)) {
+      const [n,...r] = s.split('.');
+      return `<div style="display:flex;gap:7px;align-items:flex-start;padding:2px 0;"><span style="color:var(--primary);font-weight:800;flex-shrink:0;min-width:16px;">${n}.</span><span style="color:#4B4530;">${r.join('.')}</span></div>`;
+    }
+    const bold = s.replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--text);">$1</strong>');
+    return `<p style="color:#6B5E4C;margin:3px 0;">${bold}</p>`;
+  }).join('');
+}
+
+document.getElementById('downloadPdfBtn').onclick = async () => {
+  if (!currentJobId || !currentNotesData) { alert('Generate notes first.'); return; }
+  const btn = document.getElementById('downloadPdfBtn');
+  btn.disabled = true; btn.textContent = '⏳ Preparing...';
+  const videoName = fileInput.files[0] ? fileInput.files[0].name : 'Video';
+  try {
+    const res = await fetch('/download_notes_pdf', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        job_id: currentJobId, language: currentNotesData.language,
+        video_name: videoName, notes_en: currentNotesData.notes_en, notes: currentNotesData.notes
+      })
+    });
+    if (!res.ok) { const e = await res.json(); alert('PDF error: ' + (e.error||'Unknown')); return; }
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `VidyaVaani_Notes_${currentNotesData.language}.pdf`;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
+  } catch (err) { alert('PDF download failed: ' + err.message); }
+  finally { btn.disabled = false; btn.textContent = '⬇ Download PDF'; }
+};
+
+// ── Standalone AI Tutor View ──
+const tutorTopicSelect = document.getElementById('tutorTopicSelect');
+const tutorAnsLang = document.getElementById('tutorAnsLang');
+const tutorChatBox = document.getElementById('tutorChatBox');
+const tutorChatInput = document.getElementById('tutorChatInput');
+const tutorSendBtn = document.getElementById('tutorSendBtn');
+const tutorMicBtn = document.getElementById('tutorMicBtn');
+
+async function loadTutorContexts() {
+  try {
+    const res = await fetch('/history_list');
+    const items = await res.json();
+    const activeVal = tutorTopicSelect.value;
+    let html = '<option value="general">🌍 General Academic Assistant</option>';
+    html += items.map(item => `<option value="${item.job_id}">${item.title}</option>`).join('');
+    tutorTopicSelect.innerHTML = html;
+    if (activeVal && html.includes(`value="${activeVal}"`)) {
+      tutorTopicSelect.value = activeVal;
+    } else {
+      tutorTopicSelect.value = 'general';
+    }
+  } catch (err) { console.error("Error loading tutor contexts:", err); }
+}
+
+async function askTutorQuestion() {
+  const q = tutorChatInput.value.trim();
+  const jobId = tutorTopicSelect.value || 'general';
+  if (!q) return;
+  appendTutorMsg(q, 'user');
+  tutorChatInput.value = '';
+
+  const loadingMsg = document.createElement('div');
+  loadingMsg.className = 'msg msg-ai';
+  loadingMsg.textContent = '⏳ Thinking...';
+  tutorChatBox.appendChild(loadingMsg);
+  tutorChatBox.scrollTop = tutorChatBox.scrollHeight;
+
+  try {
+    const res  = await fetch('/chat', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ job_id: jobId, question: q, ans_lang: tutorAnsLang.value })
+    });
+    const data = await res.json();
+    tutorChatBox.removeChild(loadingMsg);
+    appendTutorMsg(data.answer || data.error || 'Error getting response', 'ai', data.sources);
+  } catch (err) {
+    tutorChatBox.removeChild(loadingMsg);
+    appendTutorMsg('Failed to connect to the AI Tutor backend.', 'ai');
+  }
+}
+
+function appendTutorMsg(t, r, sources) {
+  const d = document.createElement('div');
+  d.className = `msg msg-${r}`; d.textContent = t;
+  if (sources && sources.length > 0) {
+    const srcBox = document.createElement('div');
+    srcBox.style.cssText = 'margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--border); font-size: 0.75rem; color: var(--muted);';
+    srcBox.innerHTML = '<strong style="color: var(--primary);">📚 RAG Citations:</strong> ' + 
+      sources.map(s => `<span style="display:inline-block; background: var(--bg2); padding: 2px 6px; border-radius: 4px; margin: 2px; border: 1px solid var(--border);" title="${s.chunk}">${s.lecture}</span>`).join(' ');
+    d.appendChild(srcBox);
+  }
+  tutorChatBox.appendChild(d); tutorChatBox.scrollTop = tutorChatBox.scrollHeight;
+}
+tutorSendBtn.onclick = askTutorQuestion;
+tutorChatInput.onkeypress = e => { if (e.key === 'Enter') askTutorQuestion(); };
+
+if (Recognition) {
+  const tutorRecognizer = new Recognition();
+  tutorRecognizer.continuous = false; tutorRecognizer.interimResults = false;
+  tutorMicBtn.onclick = () => { tutorRecognizer.lang='en-US'; tutorRecognizer.start(); tutorMicBtn.classList.add('active'); };
+  tutorRecognizer.onresult = e => { tutorChatInput.value = e.results[0][0].transcript; tutorMicBtn.classList.remove('active'); askTutorQuestion(); };
+  tutorRecognizer.onerror = tutorRecognizer.onend = () => tutorMicBtn.classList.remove('active');
+} else { tutorMicBtn.style.display = 'none'; }
+
+// ── Progress & Stats Dashboard Updater ──
+async function updateStatsDashboard() {
+  try {
+    const res = await fetch('/history_list');
+    const items = await res.json();
+    const streak = updateStreak();
+    document.getElementById('stat-streak-val').textContent = `${streak} Day${streak !== 1 ? 's' : ''}`;
+    document.getElementById('stat-topics-val').textContent = items.length;
+    const attempts = JSON.parse(localStorage.getItem('vv_quiz_attempts') || '[]');
+    document.getElementById('stat-quizzes-val').textContent = attempts.length;
+    let totalQuestions = 0; let totalCorrect = 0;
+    attempts.forEach(a => { totalQuestions += a.total; totalCorrect += a.score; });
+    const accuracy = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+    document.getElementById('stat-accuracy-val').textContent = `${accuracy}%`;
+    const subjectCounts = { cs: 0, math: 0, physics_chem: 0, biology: 0, general: 0 };
+    items.forEach(item => {
+      if (subjectCounts[item.domain] !== undefined) subjectCounts[item.domain]++;
+      else subjectCounts.general++;
+    });
+    const maxCount = Math.max(...Object.values(subjectCounts), 1);
+    const domains = ['cs', 'math', 'physics', 'biology', 'general'];
+    const domainKeys = { cs: 'cs', math: 'math', physics: 'physics_chem', biology: 'biology', general: 'general' };
+    domains.forEach(d => {
+      const key = domainKeys[d];
+      const count = subjectCounts[key] || 0;
+      document.getElementById(`mast-${d}-val`).textContent = `${count} topic${count !== 1 ? 's' : ''}`;
+      document.getElementById(`mast-${d}-fill`).style.width = `${(count / maxCount) * 100}%`;
+    });
+    
+    const badge1 = document.getElementById('badge-first-step');
+    const badge1lbl = document.getElementById('badge-first-step-lbl');
+    if (items.length > 0) { badge1.classList.remove('locked'); badge1.classList.add('unlocked'); badge1lbl.textContent = 'Unlocked'; badge1lbl.className = 'achievement-badge-status status-unlocked'; }
+    
+    const badge2 = document.getElementById('badge-perfect-score');
+    const badge2lbl = document.getElementById('badge-perfect-score-lbl');
+    if (attempts.some(a => a.score === a.total && a.total > 0)) { badge2.classList.remove('locked'); badge2.classList.add('unlocked'); badge2lbl.textContent = 'Unlocked'; badge2lbl.className = 'achievement-badge-status status-unlocked'; }
+    
+    const badge3 = document.getElementById('badge-scholar');
+    const badge3lbl = document.getElementById('badge-scholar-lbl');
+    if (items.length >= 3) { badge3.classList.remove('locked'); badge3.classList.add('unlocked'); badge3lbl.textContent = 'Unlocked'; badge3lbl.className = 'achievement-badge-status status-unlocked'; }
+    
+  } catch (err) { console.error("Error updating stats:", err); }
+}
+
+// ── Startup Initialization ──
+window.addEventListener('DOMContentLoaded', () => {
+  loadHistory();
+  updateStreak();
+  updateAuthUI();
+});
+
+// ── Subjective Tests Controllers ──
+let selectedTestTags = new Set();
+let currentTestQuestions = [];
+
+function showTestsSetup() {
+  document.getElementById('tests-step-setup').style.display = 'block';
+  document.getElementById('tests-step-arena').style.display = 'none';
+  document.getElementById('tests-step-grades').style.display = 'none';
+  document.getElementById('tests-loading').style.display = 'none';
+}
+
+async function loadTestTags() {
+  const grid = document.getElementById('testsTagsGrid');
+  grid.innerHTML = `<div class="tests-loader-msg"><div class="spinner" style="margin:0 auto 0.5rem;"></div>Loading your topics...</div>`;
+  selectedTestTags.clear();
+  showTestsSetup();
+  try {
+    const res = await fetch('/all_tags');
+    const tagsMap = await res.json();
+    const tags = Object.keys(tagsMap);
+    if (!tags.length) {
+      grid.innerHTML = `<div class="tests-empty-state">✨ No topics found.<br>Process a video in Upload & Translate first!</div>`;
+      return;
+    }
+    grid.innerHTML = tags.map(t => `
+      <button class="tag-chip" data-tag="${t.replace(/"/g, '&quot;')}" onclick="toggleTestTag(this,'${t.replace(/'/g,"\\'")}')">
+        🏷️ ${t}
+      </button>
+    `).join('');
+  } catch(e) {
+    grid.innerHTML = `<div class="tests-empty-state">⚠️ Failed to load topics. Is the server running?</div>`;
+  }
+}
+
+function toggleTestTag(el, tag) {
+  if (selectedTestTags.has(tag)) {
+    selectedTestTags.delete(tag);
+    el.classList.remove('selected');
+  } else {
+    selectedTestTags.add(tag);
+    el.classList.add('selected');
+  }
+  document.getElementById('testsSetupMsg').style.display = 'none';
+}
+
+async function generateSubjectiveTest() {
+  if (selectedTestTags.size === 0) {
+    document.getElementById('testsSetupMsg').style.display = 'inline';
+    return;
+  }
+  document.getElementById('testsSetupMsg').style.display = 'none';
+  const numQ = parseInt(document.getElementById('testsNumQuestions').value) || 3;
+  const topics = Array.from(selectedTestTags);
+
+  // Show loading
+  document.getElementById('tests-step-setup').style.display = 'none';
+  document.getElementById('tests-step-arena').style.display = 'none';
+  document.getElementById('tests-step-grades').style.display = 'none';
+  document.getElementById('tests-loading').style.display = 'block';
+  document.getElementById('tests-loading-msg').textContent = `Generating ${numQ} question${numQ>1?'s':''} on: ${topics.join(', ')}…`;
+
+  try {
+    const res = await fetch('/generate_subjective_test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topics, num_questions: numQ })
+    });
+    const questions = await res.json();
+    if (questions.error) throw new Error(questions.error);
+    currentTestQuestions = questions;
+    renderTestArena(questions);
+  } catch(e) {
+    document.getElementById('tests-loading').style.display = 'none';
+    document.getElementById('tests-step-setup').style.display = 'block';
+    document.getElementById('testsSetupMsg').style.display = 'inline';
+    document.getElementById('testsSetupMsg').textContent = '⚠️ Error generating questions: ' + e.message;
+  }
+}
+
+function renderTestArena(questions) {
+  const container = document.getElementById('testsQuestionsContainer');
+  container.innerHTML = questions.map((q, i) => `
+    <div class="question-card">
+      <div class="question-card-header">
+        <div class="question-num-badge">Q${i + 1}</div>
+        <span class="question-topic-pill">📌 ${q.topic || 'General'}</span>
+      </div>
+      <div class="question-text">${q.question_text}</div>
+      <textarea class="notebook-textarea" id="answer-${i}"
+        placeholder="Write your answer here... Be thorough and conceptual."></textarea>
+    </div>
+  `).join('');
+  document.getElementById('tests-loading').style.display = 'none';
+  document.getElementById('tests-step-arena').style.display = 'block';
+}
+
+async function submitSubjectiveTest() {
+  const answers = currentTestQuestions.map((q, i) => ({
+    topic: q.topic,
+    question_text: q.question_text,
+    student_answer: (document.getElementById(`answer-${i}`) || {}).value || ''
+  }));
+
+  document.getElementById('tests-step-arena').style.display = 'none';
+  document.getElementById('tests-loading').style.display = 'block';
+  document.getElementById('tests-loading-msg').textContent = 'Evaluating your answers with Mistral AI…';
+
+  try {
+    const res = await fetch('/evaluate_subjective_test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ answers })
+    });
+    const results = await res.json();
+    if (results.error) throw new Error(results.error);
+    renderGradebook(results);
+  } catch(e) {
+    document.getElementById('tests-loading').style.display = 'none';
+    document.getElementById('tests-step-arena').style.display = 'block';
+    alert('Error evaluating answers: ' + e.message);
+  }
+}
+
+function renderGradebook(results) {
+  const totalPts = results.reduce((s, r) => s + (r.score || 0), 0);
+  const maxPts = results.length * 10;
+  const pct = Math.round(totalPts / maxPts * 100);
+  const grade = pct >= 80 ? '🏆 Excellent' : pct >= 60 ? '👍 Good' : pct >= 40 ? '📖 Keep Studying' : '💪 More Practice Needed';
+
+  document.getElementById('testsTotalScore').textContent = `${totalPts}/${maxPts} — ${grade}`;
+
+  const container = document.getElementById('testsGradesContainer');
+  container.innerHTML = results.map((r, i) => {
+    const score = r.score || 0;
+    const circleClass = score >= 8 ? 'high' : score >= 5 ? 'mid' : 'low';
+    const studentAns = r.student_answer ? r.student_answer.trim() : '(No answer provided)';
+    return `
+      <div class="grade-card">
+        <div class="grade-card-header">
+          <div class="grade-score-circle ${circleClass}">${score}/10</div>
+          <div>
+            <div class="grade-question-q">Q${i+1}. ${r.question_text}</div>
+            <div class="grade-question-topic">📌 ${r.topic || 'General'}</div>
+          </div>
+        </div>
+        <div class="grade-body">
+          <div class="grade-section">
+            <div class="grade-section-label">✍️ Your Answer</div>
+            <div class="grade-section-text" style="color:var(--muted);font-style:italic;">${studentAns}</div>
+          </div>
+          <div class="grade-section">
+            <div class="grade-section-label">💬 AI Feedback</div>
+            <div class="grade-section-text">${r.feedback}</div>
+          </div>
+          <div class="grade-section">
+            <div class="grade-section-label">📘 Model Answer</div>
+            <div class="grade-model-answer">${r.model_answer}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('tests-loading').style.display = 'none';
+  document.getElementById('tests-step-grades').style.display = 'block';
+}
+</script>

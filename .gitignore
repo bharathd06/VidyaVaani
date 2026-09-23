@@ -1,0 +1,72 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+env*/
+
+# Environment variables & secrets
+.env
+.env.*
+*.env
+
+# Large Media Files (Prevents GitHub 100MB limit & long filename errors)
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.flv
+*.wmv
+*.webm
+*.mp3
+*.wav
+*.aac
+*.ogg
+*.flac
+*.m4a
+
+# Application Uploads and Generated Outputs
+uploads/
+outputs/
+**/uploads/
+**/outputs/
+dubber_app/uploads/
+dubber_app/outputs/
+
+# Vector Database, Indexing & Chroma Cache
+dubber_app/chroma_db/
+**/chroma_db/
+*.sqlite3
+*.bin
+dubber_app/vector_index.json
+dubber_app/history.json
+
+# Operating System & Editor Files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+.agents/
+
+# LaTeX build auxiliary files
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.out
+*.run.xml
+
+# Project Report Templates & Guides
+Project-Report-Template*/
+RAG_Implementation_Guide.pdf

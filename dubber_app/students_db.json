@@ -1,0 +1,17 @@
+{
+  "students": {
+    "teststudent123": {
+      "password": "password123",
+      "studied_topics": [],
+      "completed_quizzes": [
+        {
+          "job_id": "123456789",
+          "video_name": "test_video.mp4",
+          "score": 2,
+          "total_questions": 3,
+          "date": "2026-06-23 22:10:17"
+        }
+      ]
+    }
+  }
+}
